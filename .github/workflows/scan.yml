@@ -52,7 +52,10 @@ jobs:
         run: |
           git config user.name "bebas-bot"
           git config user.email "bebas-bot@users.noreply.github.com"
-          git add signals.json fundamentals.json research.json lookup.json 2>/dev/null || true
+          # add only the files that exist: one missing file would make a single "git add" stage nothing
+          for f in signals.json fundamentals.json research.json lookup.json; do
+            if [ -f "$f" ]; then git add "$f"; fi
+          done
           git diff --cached --quiet || git commit -m "Scan $(date -u +%F)"
           git pull --rebase --autostash || true
           git push
