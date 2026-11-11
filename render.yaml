@@ -1,0 +1,22 @@
+# Render Blueprint: the live lookup server for Bebas (free plan).
+# Render reads this file when you choose New > Blueprint and pick your bebas repo.
+services:
+  - type: web
+    name: bebas-api
+    runtime: python
+    plan: free
+    branch: main
+    buildCommand: pip install -r requirements-server.txt
+    startCommand: uvicorn server:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
+    # The daily scan commits to the repo every weekday; the server reads fresh data from your
+    # GitHub Pages site, so it does not need to redeploy each time.
+    autoDeploy: false
+    envVars:
+      - key: SITE_URL
+        value: https://adrian1021.github.io/bebas
+      - key: ALLOW_ORIGIN
+        value: https://adrian1021.github.io
+      # Render makes a random access key; copy it from the Environment tab into the app (Lookup > Live server).
+      - key: LOOKUP_KEY
+        generateValue: true

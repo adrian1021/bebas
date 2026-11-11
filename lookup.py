@@ -370,17 +370,19 @@ def _j(o):
     return str(o)
 
 
-def main(argv: list[str]) -> None:
-    raw_codes = argv or [c for c in os.environ.get("RESEARCH_TICKER", "").split(",") if c.strip()]
-    codes = list(dict.fromkeys(_code(c) for c in raw_codes if c.strip()))
-    if not codes:
-        print("Nothing to look up.")
-        return
+def analyse_codes(codes: list[str], sig: dict, fund_provider) -> tuple[dict, dict]:
+    """Core of the lookup, shared by the GitHub workflow (main) and the live server.
+
+    codes: normalised codes. sig: the latest signals.json (regime and themes).
+    fund_provider(tickers) -> {ticker: scored fundamentals}. Writes nothing.
+    Returns (items by code, errors by code).
+    """
     ws = SC.CFG.get("warrants", [])
     by_code = {}
     for w in ws:
         by_code[w["code"].upper()] = w
-        by_code[w.get("yahoo", "").replace(".KL", "").upper()] = w
+        if w.get("yahoo"):
+            by_code[w["yahoo"].replace(".KL", "").upper()] = w
 
     errors, targets = {}, []
     for c in codes:
@@ -392,41 +394,29 @@ def main(argv: list[str]) -> None:
             errors[c] = ("Not recognised. Use a Bursa stock code (e.g. 1155) or a warrant code that is in "
                          "config.json (warrants list, with mother, exercise, ratio and expiry).")
     if not targets:
-        write_out({}, errors)
-        return
+        return {}, errors
 
     tickers = list(dict.fromkeys(
         [f"{c}.KL" for c, k in targets if k == "stock"] +
         [by_code[c]["mother"] for c, k in targets if k == "warrant"]))
     print(f"Looking up {len(targets)} code(s): {', '.join(c for c, _ in targets)}")
     data = SC.fetch_data(tickers, SC.S["history_period"], 220)
-    index_df = SC.fetch_data([SC.CFG["index"]], "1y", 60).get(SC.CFG["index"])
 
-    # warrant prices (live where Yahoo has them)
-    need = [w for w in ws if w.get("price") is None]
+    # warrant prices: your own "price" in config.json wins, then Yahoo, else theoretical
+    relevant = [w for w in ws if w["mother"] in tickers]
+    for w in relevant:
+        w["_price"] = float(w["price"]) if w.get("price") else None
+    need = [w for w in relevant if not w.get("price")]
     if need:
         wd = SC.fetch_data([w.get("yahoo", w["code"] + ".KL") for w in need], "1mo", 1)
-        for w in ws:
-            if w.get("price"):
-                w["_price"] = float(w["price"])
-            else:
-                df = wd.get(w.get("yahoo", w["code"] + ".KL"))
-                w["_price"] = float(df["close"].iloc[-1]) if df is not None and len(df) else None
+        for w in need:
+            df = wd.get(w.get("yahoo", w["code"] + ".KL"))
+            w["_price"] = float(df["close"].iloc[-1]) if df is not None and len(df) else None
 
-    sig = R.load_json(ROOT / "signals.json", {})
     regime_ok = (sig.get("regime") or {}).get("state", "healthy") == "healthy"
     where = ((sig.get("themes") or {}).get("where")) or {}
-
-    rcfg = SC.CFG.get("research", {})
-    fpath = ROOT / "fundamentals.json"
-    try:
-        fc = R.refresh_fundamentals(list(dict.fromkeys(list(SC.CFG["universe"]) + tickers)), tickers, fpath, rcfg)
-        fc = R.score_all(fc, SC.CFG.get("sectors", {}))
-        fpath.write_text(json.dumps(fc, separators=(",", ":"), default=str), encoding="utf-8")
-    except Exception as e:
-        print(f"fundamentals step failed: {e}", file=sys.stderr)
-        fc = R.load_json(fpath, {"stocks": {}})
-    fs = fc.get("stocks", {})
+    fs = fund_provider(tickers) or {}
+    stamp = dt.datetime.now(MYT).strftime("%Y-%m-%d %H:%M MYT")
 
     out = {}
     for code, kind in targets:
@@ -436,12 +426,12 @@ def main(argv: list[str]) -> None:
                 raise ValueError("no usable price history from Yahoo Finance (check the code, or try again later)")
             name = SC.CFG["universe"].get(t) or (fs.get(t) or {}).get("long_name") or code
             fund = fs.get(t)
-            nm = name
-            news = R.stock_news(t, nm, (fund or {}).get("long_name"))
-            insider = R.insider_news(t, nm, (fund or {}).get("long_name"))
+            news = R.stock_news(t, name, (fund or {}).get("long_name"))
+            insider = R.insider_news(t, name, (fund or {}).get("long_name"))
             tags = [{"path": x.get("path"), "status": x.get("status")} for x in where.get(t, [])[:3]]
             item, d = analyse(t, data[t], name, fund, news, insider, tags, regime_ok)
             item["type"] = kind
+            item["generated_at"] = stamp
             item["warrants"] = [warrant_detail(w, d, item) for w in ws if w["mother"] == t]
             if kind == "warrant":
                 w = by_code[code]
@@ -456,6 +446,30 @@ def main(argv: list[str]) -> None:
         except Exception as e:
             errors[code] = str(e)
             print(f"error: {code}: {e}", file=sys.stderr)
+    return out, errors
+
+
+def main(argv: list[str]) -> None:
+    raw_codes = argv or [c for c in os.environ.get("RESEARCH_TICKER", "").split(",") if c.strip()]
+    codes = list(dict.fromkeys(_code(c) for c in raw_codes if c.strip()))
+    if not codes:
+        print("Nothing to look up.")
+        return
+    sig = R.load_json(ROOT / "signals.json", {})
+    rcfg = SC.CFG.get("research", {})
+    fpath = ROOT / "fundamentals.json"
+
+    def provider(tickers):
+        try:
+            fc = R.refresh_fundamentals(list(dict.fromkeys(list(SC.CFG["universe"]) + tickers)), tickers, fpath, rcfg)
+            fc = R.score_all(fc, SC.CFG.get("sectors", {}))
+            fpath.write_text(json.dumps(fc, separators=(",", ":"), default=str), encoding="utf-8")
+        except Exception as e:
+            print(f"fundamentals step failed: {e}", file=sys.stderr)
+            fc = R.load_json(fpath, {"stocks": {}})
+        return fc.get("stocks", {})
+
+    out, errors = analyse_codes(codes, sig, provider)
     write_out(out, errors)
 
 
@@ -463,8 +477,8 @@ def write_out(items: dict, errors: dict) -> None:
     path = ROOT / "lookup.json"
     prev = R.load_json(path, {"items": {}})
     stamp = dt.datetime.now(MYT).strftime("%Y-%m-%d %H:%M MYT")
-    for k, v in items.items():
-        v["generated_at"] = stamp
+    for v in items.values():
+        v.setdefault("generated_at", stamp)
     merged = dict(prev.get("items", {}))
     merged.update(items)
     doc = {"generated_at": stamp, "items": merged, "errors": errors}

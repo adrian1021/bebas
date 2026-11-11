@@ -199,7 +199,14 @@ input.search{width:100%;padding:11px 12px;border-radius:12px;border:1px solid va
   <h2>Analyse any stock or warrant</h2>
   <p class="muted small">Type a Bursa code (e.g. 1155) or a call-warrant code. You get technical, fundamental, money-flow, insider and news analysis, a confidence score for each holding period, and entry, stop and target levels.</p>
   <input class="search" id="lkQ" placeholder="e.g. 1155, 5347 or YTLPOWR-C2C" autocomplete="off" autocapitalize="characters">
+  <div class="row" style="margin-bottom:10px"><button class="btn" id="lkGo">Show analysis</button><span class="small muted" id="lkSrvState"></span></div>
   <div class="fam" id="lkChips"></div>
+  <details class="card" id="lkSrv"><summary>Live server settings</summary>
+    <p class="small muted">Optional. Paste the address of your Bebas server (for example on Render) to analyse any stock instantly. Leave it empty to use results saved by the last scan.</p>
+    <input class="search" id="lkUrl" placeholder="Server address, e.g. https://bebas-api.onrender.com" autocomplete="off" autocapitalize="off" spellcheck="false">
+    <input class="search" id="lkKey" type="password" placeholder="Access key (Render > Environment > LOOKUP_KEY)" autocomplete="off" autocapitalize="off">
+    <div class="row"><button class="btn" id="lkSave">Save and test</button><span class="small" id="lkTest"></span></div>
+  </details>
   <div id="lkOut"></div>
 </section>
 
@@ -825,19 +832,60 @@ function lookupCard(it){
     <p class="small muted">Scores are a rules-based read of the data, not a promise. Check the company's Bursa announcements before you trade. Educational tool, not financial advice.</p>`}
 const order4=['contra','short','mid','long'];
 function lkChips(){const codes=Object.keys(LK.items||{});$('#lkChips').innerHTML=codes.length?codes.map(c=>`<button data-c="${esc(c)}">${esc(c)}</button>`).join(''):'<span class="small muted">Nothing analysed yet.</span>'}
+/* live server: optional. Saved on this device only. */
+const SRV_LS='bebas.srv';
+function srvCfg(){try{return JSON.parse(localStorage.getItem(SRV_LS)||'{}')}catch(e){return {}}}
+function srvSave(c){try{localStorage.setItem(SRV_LS,JSON.stringify(c))}catch(e){}}
+function srvUrl(){return String(srvCfg().url||'').replace(/\/+$/,'')}
+/* opening the app with ?srv=ADDRESS&key=KEY saves the settings once (handy on a new device) */
+try{const q=new URLSearchParams(location.search),u=q.get('srv');if(u){srvSave({url:u,key:q.get('key')||''});history.replaceState(null,'',location.pathname+location.hash)}}catch(e){}
+function lkCode(q){return String(q||'').trim().toUpperCase().replace(/\.KL$/,'')}
+function lkSrvState(){const on=!!srvUrl();$('#lkSrvState').textContent=on?'Live server on':'Live server off: shows results from the last scan';$('#lkGo').textContent=on?'Analyse live':'Show analysis'}
+function lkNotFound(code){
+  const err=(LK.errors||{})[code];
+  return `<div class="card"><h3>${esc(code)}: not analysed yet</h3>
+    <p class="small">${srvUrl()?'Press <b>Analyse live</b> to run it now.':err?esc(err):'Run an analysis: GitHub, then Actions, then Daily scan, then Run workflow. Type this code in "Analyse stocks or warrants". It takes a few minutes, and the result appears here after the run.'}</p>
+    <p class="small muted">Stock codes are four digits (e.g. 1155). A warrant must be in config.json first (mother, exercise, ratio, expiry).</p></div>`}
 function lkRender(q){
-  const out=$('#lkOut');
-  const code=(q||'').trim().toUpperCase().replace(/\.KL$/,'');
+  const out=$('#lkOut'),code=lkCode(q);
   if(!code){out.innerHTML='';return}
   const it=(LK.items||{})[code];
-  if(it){out.innerHTML=lookupCard(it);return}
-  const err=(LK.errors||{})[code];
-  out.innerHTML=`<div class="card"><h3>${esc(code)}: not analysed yet</h3>
-    <p class="small">${err?esc(err):'Run an analysis: GitHub, then Actions, then Daily scan, then Run workflow. Type this code in "Research a stock". It takes a few minutes, and the result appears here after the run.'}</p>
-    <p class="small muted">Stock codes are four digits (e.g. 1155). A warrant must be in config.json first (mother, exercise, ratio, expiry).</p></div>`;
+  if(it){out.innerHTML=(srvUrl()?`<div class="row" style="margin:0 0 10px"><button class="btn ghost" data-live="${esc(code)}">Refresh live</button><span class="small muted">Saved result from ${esc(it.generated_at||'the last scan')}</span></div>`:'')+lookupCard(it);return}
+  out.innerHTML=lkNotFound(code);
 }
+async function lkLive(code,force){
+  const u=srvUrl(),out=$('#lkOut');
+  if(!u){lkRender(code);return}
+  out.innerHTML=`<div class="card"><p style="margin:0"><b>Analysing ${esc(code)} live…</b></p><p class="small muted" style="margin:6px 0 0">This takes 10 to 40 seconds. After a quiet spell the server may need up to a minute to wake up.</p></div>`;
+  try{
+    const k=srvCfg().key||'',ctl=new AbortController(),tm=setTimeout(()=>ctl.abort(),120000);
+    const r=await fetch(`${u}/lookup?code=${encodeURIComponent(code)}${force?'&refresh=1':''}`,{headers:k?{'X-Key':k}:{},signal:ctl.signal});
+    clearTimeout(tm);
+    let j={};try{j=await r.json()}catch(e){}
+    if(!r.ok)throw new Error(j.error||('The server answered '+r.status));
+    LK.items[code]=j.item;if(j.item.code)LK.items[j.item.code]=j.item;lkChips();
+    out.innerHTML=`<div class="row" style="margin:0 0 10px"><span class="small muted">Live from your server${j.cached?'. Reused a result from the last few minutes; press Refresh for a new one':''}.</span><button class="btn ghost" data-live="${esc(code)}">Refresh</button></div>`+lookupCard(j.item);
+  }catch(e){
+    const net=e.name==='AbortError'||e instanceof TypeError;
+    out.innerHTML=`<div class="card"><h3>${esc(code)}: could not analyse</h3><p class="small">${esc(net?'Could not reach the server. Check the address in Live server settings, and try again in a minute if it was asleep.':e.message)}</p></div>`;
+  }
+}
+function lkGo(){const code=lkCode($('#lkQ').value);if(!code)return;srvUrl()?lkLive(code,false):lkRender(code)}
+$('#lkGo').onclick=lkGo;
+$('#lkQ').onkeydown=e=>{if(e.key==='Enter')lkGo()};
 $('#lkQ').oninput=e=>lkRender(e.target.value);
 $('#lkChips').onclick=e=>{const b=e.target.closest('button');if(!b)return;$('#lkQ').value=b.dataset.c;lkRender(b.dataset.c)};
+$('#lkOut').onclick=e=>{const b=e.target.closest('button[data-live]');if(b)lkLive(b.dataset.live,true)};
+$('#lkSave').onclick=async()=>{
+  const url=$('#lkUrl').value.trim().replace(/\/+$/,''),key=$('#lkKey').value.trim(),t=$('#lkTest');
+  srvSave({url,key});lkSrvState();
+  if(!url){t.textContent='Live server turned off.';return}
+  t.textContent='Testing… (up to a minute if the server was asleep)';
+  try{const r=await fetch(url+'/health'),j=await r.json();t.textContent=j.ok?(j.key_required&&!key?'Reachable, but it needs an access key.':'Connected.'):'Unexpected answer.'}
+  catch(e){t.textContent='Could not reach that address.'}};
+$('#lkUrl').value=srvCfg().url||'';$('#lkKey').value=srvCfg().key||'';lkSrvState();
+/* wake a sleeping server as soon as the Lookup tab opens */
+{const nb=document.querySelector('#nav button[data-t="lookup"]');if(nb)nb.addEventListener('click',()=>{const u=srvUrl();if(u&&!window._srvWoke){window._srvWoke=1;fetch(u+'/health').catch(()=>{})}})}
 
 /* ---------- boot ---------- */
 const DEMO=/*DEMO*/null;
