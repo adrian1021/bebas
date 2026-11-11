@@ -1,0 +1,856 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Bebas Trading Coach</title>
+<meta name="theme-color" content="#0f1512">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f5f3ee;--panel:#ffffff;--panel2:#efece5;--ink:#1a1d1b;--muted:#6b6f69;--line:#dedad0;
+  --up:#0f8a5f;--up-bg:#e0f2ea;--down:#c2412d;--down-bg:#fbe6e1;--warn:#b7791f;--warn-bg:#fbf0d9;
+  --accent:#0f8a5f;--accent-ink:#fff;--chip:#e8e5dc;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0f1512;--panel:#171e1a;--panel2:#1d2621;--ink:#e8ece9;--muted:#93a097;--line:#2a352f;
+  --up:#3fcf8e;--up-bg:#173326;--down:#f07a64;--down-bg:#3a1f1a;--warn:#e9b65a;--warn-bg:#3a2e17;
+  --accent:#3fcf8e;--accent-ink:#0b120e;--chip:#25302a;}}
+:root[data-theme="dark"]{
+  --bg:#0f1512;--panel:#171e1a;--panel2:#1d2621;--ink:#e8ece9;--muted:#93a097;--line:#2a352f;
+  --up:#3fcf8e;--up-bg:#173326;--down:#f07a64;--down-bg:#3a1f1a;--warn:#e9b65a;--warn-bg:#3a2e17;
+  --accent:#3fcf8e;--accent-ink:#0b120e;--chip:#25302a;}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 "IBM Plex Sans",system-ui,sans-serif;-webkit-text-size-adjust:100%}
+.num,code,.mono{font-family:"IBM Plex Mono",ui-monospace,monospace;font-variant-numeric:tabular-nums}
+header{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid var(--line)}
+.top{display:flex;align-items:center;gap:10px;padding:12px 16px 8px;max-width:960px;margin:0 auto}
+.logo{width:30px;height:30px;border-radius:8px;background:var(--accent);display:grid;place-items:center;color:var(--accent-ink);font-weight:700}
+.brand{font-weight:700;font-size:17px;letter-spacing:-.01em}
+.brand small{display:block;font-weight:400;color:var(--muted);font-size:12px;letter-spacing:0}
+.top .sp{flex:1}
+.iconbtn{border:1px solid var(--line);background:var(--panel);color:var(--ink);border-radius:10px;padding:7px 10px;font:inherit;font-size:13px;cursor:pointer}
+nav{display:flex;gap:4px;overflow-x:auto;padding:0 12px 8px;max-width:960px;margin:0 auto;scrollbar-width:none}
+nav::-webkit-scrollbar{display:none}
+nav button{flex:none;border:0;background:transparent;color:var(--muted);font:inherit;font-weight:500;padding:7px 12px;border-radius:999px;cursor:pointer}
+nav button.on{background:var(--ink);color:var(--bg)}
+main{max-width:960px;margin:0 auto;padding:16px 16px 80px}
+section{display:none}section.on{display:block}
+h2{font-size:20px;margin:4px 0 4px;letter-spacing:-.01em}
+h3{font-size:16px;margin:0 0 6px}
+p{margin:0 0 10px}
+.muted{color:var(--muted)}.small{font-size:13px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px;margin:0 0 12px}
+.banner{border-radius:12px;padding:10px 12px;margin:0 0 12px;font-size:14px}
+.banner.ok{background:var(--up-bg);color:var(--up)}.banner.bad{background:var(--warn-bg);color:var(--warn)}
+.banner.info{background:var(--panel2);color:var(--muted)}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.chip{display:inline-block;font-size:12px;padding:2px 8px;border-radius:999px;background:var(--chip);color:var(--muted);font-weight:500}
+.chip.up{background:var(--up-bg);color:var(--up)}.chip.down{background:var(--down-bg);color:var(--down)}.chip.warn{background:var(--warn-bg);color:var(--warn)}
+.grade{width:40px;height:40px;border-radius:10px;display:grid;place-items:center;font-weight:700;font-size:18px;flex:none}
+.gA{background:var(--up);color:var(--accent-ink)}.gB{background:var(--up-bg);color:var(--up)}.gC{background:var(--chip);color:var(--muted)}
+.sig-h{display:flex;gap:12px;align-items:flex-start}
+.sig-h .t{flex:1;min-width:0}
+.sig-h .name{font-weight:600;font-size:16px}
+.plan{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0}
+.plan div{background:var(--panel2);border-radius:10px;padding:8px 10px}
+.plan b{display:block;font-family:"IBM Plex Mono",monospace;font-size:16px}
+.plan span{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.plan .e b{color:var(--ink)}.plan .s b{color:var(--down)}.plan .g b{color:var(--up)}
+.kv{display:grid;grid-template-columns:minmax(42%,1fr) auto;gap:4px 12px;font-size:14px}
+.kv dt{color:var(--muted)}.kv dd{margin:0;text-align:right;font-family:"IBM Plex Mono",monospace}
+ul.reasons{margin:6px 0 0;padding-left:18px;font-size:14px}
+details{border-top:1px solid var(--line);margin-top:10px;padding-top:8px}
+summary{cursor:pointer;font-weight:500;font-size:14px;color:var(--muted)}
+.chart{width:100%;height:auto;display:block;margin-top:8px}
+.tbl{width:100%;border-collapse:collapse;font-size:13px}
+.tbl th{text-align:left;color:var(--muted);font-weight:500;border-bottom:1px solid var(--line);padding:6px 4px}
+.tbl td{border-bottom:1px solid var(--line);padding:8px 4px}
+.tbl td.r,.tbl th.r{text-align:right;font-family:"IBM Plex Mono",monospace}
+.scroll{overflow-x:auto}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media (max-width:560px){.grid2{grid-template-columns:1fr}}
+label.f{display:block;font-size:13px;color:var(--muted);margin-bottom:8px}
+label.f input,label.f select{display:block;width:100%;margin-top:4px;padding:10px;border-radius:10px;border:1px solid var(--line);background:var(--panel2);color:var(--ink);font:15px "IBM Plex Mono",monospace}
+.btn{border:0;background:var(--accent);color:var(--accent-ink);font:inherit;font-weight:600;padding:10px 14px;border-radius:10px;cursor:pointer}
+.btn.ghost{background:var(--panel2);color:var(--ink)}
+.stat{background:var(--panel2);border-radius:10px;padding:10px}
+.stat b{display:block;font:600 20px "IBM Plex Mono",monospace}
+.stat span{font-size:12px;color:var(--muted)}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+@media (max-width:560px){.stats{grid-template-columns:repeat(2,1fr)}}
+.seg{display:inline-flex;background:var(--panel2);border-radius:10px;padding:3px;margin-bottom:12px}
+.seg button{border:0;background:transparent;color:var(--muted);font:inherit;font-weight:500;padding:6px 12px;border-radius:8px;cursor:pointer}
+.seg button.on{background:var(--panel);color:var(--ink);box-shadow:0 1px 2px rgba(0,0,0,.08)}
+.lesson h3{display:flex;gap:10px;align-items:center}
+.lesson .n{width:26px;height:26px;border-radius:50%;background:var(--chip);display:grid;place-items:center;font-size:13px;flex:none}
+.pat{display:grid;grid-template-columns:110px 1fr;gap:12px;align-items:center;border-top:1px solid var(--line);padding:10px 0}
+.pat:first-of-type{border-top:0}
+.pat svg{width:110px;height:80px;background:var(--panel2);border-radius:10px}
+.empty{text-align:center;padding:30px 10px;color:var(--muted)}
+.warnlist{margin:6px 0 0;padding-left:18px;color:var(--warn);font-size:13px}
+.foot{font-size:12px;color:var(--muted);text-align:center;margin-top:20px}
+#sheet{position:fixed;inset:0;background:rgba(0,0,0,.4);display:none;align-items:flex-end;justify-content:center;z-index:20}
+#sheet.on{display:flex}
+#sheet .in{background:var(--panel);width:100%;max-width:520px;border-radius:16px 16px 0 0;padding:18px 16px 24px}
+.res{background:var(--panel2);border-radius:12px;padding:12px;margin-top:6px}
+.big{font:600 26px "IBM Plex Mono",monospace}
+.fam{display:flex;gap:6px;overflow-x:auto;margin:0 0 12px;scrollbar-width:none}
+.fam button{flex:none;border:1px solid var(--line);background:var(--panel);color:var(--muted);font:inherit;font-size:13px;padding:5px 11px;border-radius:999px;cursor:pointer}
+.fam button.on{border-color:var(--ink);color:var(--ink);font-weight:600}
+.mini{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:8px}
+.mini div{background:var(--panel2);border-radius:8px;padding:6px 8px;font-size:11px;color:var(--muted)}
+.mini b{display:block;font:600 14px "IBM Plex Mono",monospace;color:var(--ink)}
+@media (max-width:420px){.mini{grid-template-columns:repeat(2,1fr)}}
+.meter{position:relative;height:8px;border-radius:9px;margin:10px 0 4px;background:linear-gradient(90deg,var(--down,#c2412d) 0%,var(--chip) 42%,var(--chip) 58%,var(--up,#0f8a5f) 100%)}
+.meter i{position:absolute;top:-4px;width:4px;height:16px;border-radius:2px;background:var(--ink);transform:translateX(-50%)}
+.accum-head{display:flex;justify-content:space-between;align-items:baseline;gap:8px;flex-wrap:wrap}
+.news a{color:var(--ink);text-decoration:none}.news a:hover{text-decoration:underline}
+.news li{margin:0 0 8px;list-style:none;display:grid;grid-template-columns:14px 1fr;gap:6px;font-size:14px}
+.news ul{padding:0;margin:6px 0 0}
+.news .d{font-size:12px;color:var(--muted)}
+.tdot{font-size:11px;line-height:20px}.tdot.positive{color:var(--up)}.tdot.negative{color:var(--down)}.tdot.neutral{color:var(--muted)}
+.ai{background:var(--panel2);border-radius:12px;padding:12px;margin-top:10px}
+.ai .v{font-weight:600}
+.md h2{font-size:15px;margin:14px 0 4px}.md h2:first-child{margin-top:0}.md p,.md li{font-size:14px}.md ul{padding-left:18px;margin:4px 0}
+.md a{color:var(--accent)}
+.bar{height:6px;background:var(--chip);border-radius:9px;overflow:hidden}.bar i{display:block;height:100%;background:var(--accent)}
+.comp{display:grid;grid-template-columns:1fr 90px 34px;gap:8px;align-items:center;font-size:13px;margin:6px 0}
+.heat td.r{border-radius:0}
+.pos{color:var(--up)}.neg{color:var(--down)}
+.srow{display:grid;grid-template-columns:1fr auto auto;gap:10px;align-items:center;padding:10px 4px;border-bottom:1px solid var(--line);cursor:pointer}
+.srow:hover{background:var(--panel2)}
+.srow .g{width:26px;height:26px;border-radius:7px;display:grid;place-items:center;font-weight:700;font-size:13px}
+.gD{background:var(--down-bg);color:var(--down)}.gN{background:var(--chip);color:var(--muted)}
+input.search{width:100%;padding:11px 12px;border-radius:12px;border:1px solid var(--line);background:var(--panel);color:var(--ink);font:inherit;margin-bottom:10px}
+.back{background:none;border:0;color:var(--accent);font:inherit;font-weight:600;padding:0;margin-bottom:10px;cursor:pointer}
+.lists{display:grid;grid-template-columns:1fr 1fr;gap:12px}@media (max-width:560px){.lists{grid-template-columns:1fr}}
+.li{display:flex;justify-content:space-between;gap:8px;font-size:14px;padding:5px 0;border-bottom:1px solid var(--line)}
+.li:last-child{border:0}
+</style>
+</head>
+<body>
+<header>
+  <div class="top">
+    <div class="logo">B</div>
+    <div class="brand">Bebas<small id="stamp">Bursa candlestick coach</small></div>
+    <div class="sp"></div>
+    <button class="iconbtn" id="setBtn" aria-label="Settings">⚙︎ <span id="capLbl"></span></button>
+  </div>
+  <nav id="nav">
+    <button data-t="signals" class="on">Signals</button>
+    <button data-t="market">Market</button>
+    <button data-t="themes">Themes</button>
+    <button data-t="playbook">Playbook</button>
+    <button data-t="lookup">Lookup</button>
+    <button data-t="research">Research</button>
+    <button data-t="backtest">Backtest</button>
+    <button data-t="calc">Calculator</button>
+    <button data-t="learn">Learn</button>
+    <button data-t="freedom">Freedom plan</button>
+    <button data-t="journal">Journal</button>
+  </nav>
+</header>
+
+<main>
+<!-- SIGNALS -->
+<section id="signals" class="on">
+  <div id="regime"></div>
+  <div class="row" style="justify-content:space-between;margin-bottom:8px">
+    <h2>Today's setups</h2>
+    <div class="seg" id="sigFilter" style="margin:0"><button data-f="alert" class="on">Alerts</button><button data-f="all">All</button></div>
+  </div>
+  <div class="fam" id="famFilter"><button data-g="" class="on">All types</button><button data-g="Candlestick">Candlestick</button><button data-g="Breakout">Breakout</button><button data-g="Swing">Swing</button><button data-g="Volume">Volume</button></div>
+  <div id="sigList"></div>
+  <div id="exitBox"></div>
+  <div id="warnBox"></div>
+  <div id="wBox"></div>
+</section>
+
+<!-- MARKET -->
+<section id="market">
+  <h2>Market overview</h2>
+  <p class="muted small" id="mkDate"></p>
+  <div id="mkTop"></div>
+  <div class="card"><h3>Sector rotation</h3><p class="small muted">Average move of the stocks in each sector. Money tends to keep flowing into the leaders: favour setups there.</p><div class="scroll"><table class="tbl heat" id="mkSect"></table></div></div>
+  <div class="lists"><div class="card"><h3>Top gainers today</h3><div id="mkGain"></div></div><div class="card"><h3>Top losers today</h3><div id="mkLose"></div></div></div>
+  <div class="card"><h3>Unusual volume</h3><p class="small muted">2.5x or more of the normal daily volume. Big players are active: check the news.</p><div id="mkVol"></div></div>
+  <div class="card news"><h3>Fund flow</h3><p class="small muted">Weekly foreign, local institution and retail net buying (from news reports).</p><div id="mkFlow"></div></div>
+  <div class="card news"><h3>Breaking news</h3><p class="small muted" id="newsTone"></p><div id="mkNews"></div></div>
+</section>
+
+<!-- THEMES -->
+<section id="themes">
+  <h2>Themes and hot money</h2>
+  <p class="muted small">Sector › theme › sub-theme › stock. Tap a theme to drill down; tap a stock for its research page.</p>
+  <div id="thBrief"></div><div id="thTop"></div><div id="thTree"></div>
+</section>
+
+<!-- PLAYBOOK -->
+<section id="playbook">
+  <h2>Playbook by holding period</h2>
+  <div class="seg" id="pbSeg" style="display:flex;overflow-x:auto"><button data-k="contra">Contra</button><button data-k="short">≤1 month</button><button data-k="mid">1–3 months</button><button data-k="long">Long term</button></div>
+  <div id="pbBody"></div>
+</section>
+
+<!-- LOOKUP -->
+<section id="lookup">
+  <h2>Analyse any stock or warrant</h2>
+  <p class="muted small">Type a Bursa code (e.g. 1155) or a call-warrant code. You get technical, fundamental, money-flow, insider and news analysis, a confidence score for each holding period, and entry, stop and target levels.</p>
+  <input class="search" id="lkQ" placeholder="e.g. 1155, 5347 or YTLPOWR-C2C" autocomplete="off" autocapitalize="characters">
+  <div class="fam" id="lkChips"></div>
+  <div id="lkOut"></div>
+</section>
+
+<!-- RESEARCH -->
+<section id="research">
+  <div id="rsList">
+    <h2>Company research</h2>
+    <p class="muted small">Fundamental grade for every stock in the scanner. Tap a stock for the full picture.</p>
+    <input class="search" id="rsQ" placeholder="Search code or name, e.g. 1155 or Maybank" autocomplete="off">
+    <div class="fam" id="rsSort"><button data-o="score" class="on">Best fundamentals</button><button data-o="r20">20-day move</button><button data-o="dy">Dividend yield</button><button data-o="pe">Lowest P/E</button></div>
+    <div class="card" style="padding:4px 10px" id="rsRows"></div>
+  </div>
+  <div id="rsDetail" style="display:none"></div>
+</section>
+
+<!-- BACKTEST -->
+<section id="backtest">
+  <h2>Does it actually work?</h2>
+  <p class="muted small" id="btIntro"></p>
+  <div id="btOverall"></div>
+  <div class="card"><h3>Every strategy, ranked by expectancy</h3>
+    <p class="small muted">Only patterns marked <span class="chip up">Edge</span> can trigger a Telegram alert. Expectancy is the average result per trade in R (1R = the amount you risked), after costs.</p>
+    <div class="scroll"><table class="tbl" id="btTable"></table></div></div>
+  <div class="card"><h3>Which context works better?</h3><div class="scroll"><table class="tbl" id="btSetup"></table></div></div>
+  <div class="card"><h3>Bearish patterns as exit warnings</h3>
+    <p class="small muted">After a bearish candle in an uptrend, how often was the price lower 10 trading days later?</p>
+    <div class="scroll"><table class="tbl" id="btBear"></table></div></div>
+  <div class="card"><h3>How the test is run</h3><div class="small" id="btRules"></div></div>
+</section>
+
+<!-- CALCULATOR -->
+<section id="calc">
+  <div class="seg" id="calcSeg"><button data-c="stock" class="on">Stock</button><button data-c="warrant">Call warrant</button></div>
+  <div id="calcStock" class="card">
+    <h3>Position size for a stock trade</h3>
+    <p class="small muted">Risk a fixed % of your capital on each trade. The stop decides how many shares you can buy, not the other way round.</p>
+    <div class="grid2">
+      <label class="f">Capital (RM)<input id="cs_cap" type="number" inputmode="decimal"></label>
+      <label class="f">Risk per trade (%)<input id="cs_risk" type="number" step="0.25" inputmode="decimal"></label>
+      <label class="f">Entry price<input id="cs_entry" type="number" step="0.005" inputmode="decimal" value="2.50"></label>
+      <label class="f">Stop-loss<input id="cs_stop" type="number" step="0.005" inputmode="decimal" value="2.35"></label>
+      <label class="f">Target (blank = 2R)<input id="cs_tgt" type="number" step="0.005" inputmode="decimal"></label>
+      <label class="f">Brokerage (%, min RM8)<input id="cs_brk" type="number" step="0.01" inputmode="decimal" value="0.08"></label>
+    </div>
+    <div class="res" id="cs_out"></div>
+  </div>
+  <div id="calcWarrant" class="card" style="display:none">
+    <h3>Call warrant analyser</h3>
+    <p class="small muted">Enter the term sheet details (from Bursa or the issuer). The app estimates fair value, gearing, and what the warrant is worth if the mother share hits your stop or target.</p>
+    <div class="grid2">
+      <label class="f">Mother share price<input id="cw_S" type="number" step="0.01" inputmode="decimal" value="10.00"></label>
+      <label class="f">Exercise price<input id="cw_K" type="number" step="0.01" inputmode="decimal" value="10.50"></label>
+      <label class="f">Conversion ratio (warrants per share)<input id="cw_ratio" type="number" step="0.1" inputmode="decimal" value="5"></label>
+      <label class="f">Warrant price<input id="cw_W" type="number" step="0.005" inputmode="decimal" value="0.12"></label>
+      <label class="f">Expiry date<input id="cw_exp" type="date"></label>
+      <label class="f">Mother share: stop / target<span class="row" style="flex-wrap:nowrap"><input id="cw_mstop" type="number" step="0.01" value="9.60"><input id="cw_mtgt" type="number" step="0.01" value="10.80"></span></label>
+    </div>
+    <div class="res" id="cw_out"></div>
+  </div>
+</section>
+
+<!-- LEARN -->
+<section id="learn">
+  <h2>Learn the method</h2>
+  <p class="muted">Short lessons. Read them in order once, then use them as a reference.</p>
+  <div id="lessons"></div>
+</section>
+
+<!-- FREEDOM -->
+<section id="freedom">
+  <h2>Your financial freedom plan</h2>
+  <p class="muted">Financial freedom is when your investments can pay your living costs. Trading can speed this up, but saving and long-term investing do most of the work.</p>
+  <div class="card">
+    <div class="grid2">
+      <label class="f">Monthly living cost today (RM)<input id="ff_exp" type="number" inputmode="decimal" value="5000"></label>
+      <label class="f">Already invested (RM, incl. EPF if you want)<input id="ff_now" type="number" inputmode="decimal" value="100000"></label>
+      <label class="f">Invest every month (RM)<input id="ff_add" type="number" inputmode="decimal" value="2000"></label>
+      <label class="f">Expected yearly return (%)<input id="ff_ret" type="number" step="0.5" inputmode="decimal" value="6"></label>
+      <label class="f">Inflation (%)<input id="ff_inf" type="number" step="0.5" inputmode="decimal" value="3"></label>
+      <label class="f">Safe withdrawal rate (%)<input id="ff_wr" type="number" step="0.25" inputmode="decimal" value="4"></label>
+    </div>
+    <div class="res" id="ff_out"></div>
+    <svg id="ff_chart" class="chart" viewBox="0 0 600 220"></svg>
+  </div>
+  <div class="card"><h3>Where trading fits</h3>
+    <ul class="small" style="padding-left:18px;margin:0">
+      <li><b>Core first.</b> Emergency fund (6 months of costs), then steady long-term investing (EPF, ASB, low-cost index or dividend funds). This is the engine.</li>
+      <li><b>Trading account is a satellite.</b> Start with money you can afford to lose, say 5 to 10% of your investments, until your journal shows 50+ trades with positive expectancy.</li>
+      <li><b>Scale only with evidence.</b> Add capital to trading only after 6 months of following the rules with a positive average R.</li>
+      <li><b>Take profits home.</b> Each quarter, move part of any trading profit into the core portfolio. That is how trading turns into freedom.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- JOURNAL -->
+<section id="journal">
+  <h2>Trade journal</h2>
+  <p class="muted small">Your real results are the only backtest that matters. Saved on this device only.</p>
+  <div class="card">
+    <div class="grid2">
+      <label class="f">Stock code / name<input id="j_code" placeholder="e.g. 1155 Maybank"></label>
+      <label class="f">Pattern / reason<input id="j_pat" placeholder="e.g. Bullish Engulfing"></label>
+      <label class="f">Entry<input id="j_entry" type="number" step="0.005" inputmode="decimal"></label>
+      <label class="f">Stop<input id="j_stop" type="number" step="0.005" inputmode="decimal"></label>
+      <label class="f">Exit (blank if still open)<input id="j_exit" type="number" step="0.005" inputmode="decimal"></label>
+      <label class="f">Units<input id="j_qty" type="number" step="100" inputmode="numeric"></label>
+    </div>
+    <div class="row"><button class="btn" id="j_add">Add trade</button><button class="btn ghost" id="j_csv">Export CSV</button></div>
+  </div>
+  <div id="j_stats"></div>
+  <div class="card scroll"><table class="tbl" id="j_tbl"></table></div>
+</section>
+
+<p class="foot">Educational tool. Not financial advice. Past results do not guarantee future returns.</p>
+</main>
+
+<div id="sheet"><div class="in">
+  <h3>Your account</h3>
+  <p class="small muted">Used to size every signal. Saved on this device.</p>
+  <div class="grid2">
+    <label class="f">Trading capital (RM)<input id="s_cap" type="number" inputmode="decimal"></label>
+    <label class="f">Risk per trade (%)<input id="s_risk" type="number" step="0.25" inputmode="decimal"></label>
+    <label class="f">Max in one stock (%)<input id="s_max" type="number" step="5" inputmode="decimal"></label>
+    <label class="f">Theme<select id="s_theme"><option value="">Auto</option><option value="light">Light</option><option value="dark">Dark</option></select></label>
+  </div>
+  <div class="row"><button class="btn" id="s_save">Save</button><button class="btn ghost" id="s_close">Cancel</button></div>
+</div></div>
+
+<script>
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const store={get(k,d){try{const v=localStorage.getItem('bebas_'+k);return v?JSON.parse(v):d}catch(e){return d}},
+  set(k,v){try{localStorage.setItem('bebas_'+k,JSON.stringify(v))}catch(e){}}};
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const rm=(x,d=0)=>'RM'+Number(x).toLocaleString('en-MY',{minimumFractionDigits:d,maximumFractionDigits:d});
+const px=x=>x==null||isNaN(x)?'–':Number(x).toFixed(x<1?3:x<10?3:2);
+const tick=p=>p<1?0.005:p<10?0.01:p<100?0.02:0.1;
+let D=null, F={stocks:{}}, RS={}, acct=store.get('acct',null), filter='alert', famF='', rsSort='score';
+
+/* ---------- tabs ---------- */
+$('#nav').onclick=e=>{const b=e.target.closest('button');if(!b)return;
+  $$('#nav button').forEach(x=>x.classList.toggle('on',x===b));
+  $$('main section').forEach(s=>s.classList.toggle('on',s.id===b.dataset.t));
+  store.set('tab',b.dataset.t);window.scrollTo(0,0)};
+const lastTab=store.get('tab','signals');const tb=$(`#nav button[data-t="${lastTab}"]`);if(tb)tb.click();
+
+/* ---------- theme + settings ---------- */
+function applyTheme(t){if(t)document.documentElement.dataset.theme=t;else delete document.documentElement.dataset.theme}
+applyTheme(store.get('theme',''));
+function acctDefaults(){return acct||(D&&D.account?{capital:D.account.capital,risk_pct:D.account.risk_pct,max_position_pct:D.account.max_position_pct}:{capital:20000,risk_pct:1,max_position_pct:25})}
+function showCap(){const a=acctDefaults();$('#capLbl').textContent=rm(a.capital)+' · '+a.risk_pct+'%'}
+$('#setBtn').onclick=()=>{const a=acctDefaults();$('#s_cap').value=a.capital;$('#s_risk').value=a.risk_pct;$('#s_max').value=a.max_position_pct;$('#s_theme').value=store.get('theme','');$('#sheet').classList.add('on')};
+$('#s_close').onclick=()=>$('#sheet').classList.remove('on');
+$('#sheet').onclick=e=>{if(e.target.id==='sheet')$('#sheet').classList.remove('on')};
+$('#s_save').onclick=()=>{acct={capital:+$('#s_cap').value||20000,risk_pct:+$('#s_risk').value||1,max_position_pct:+$('#s_max').value||25};
+  store.set('acct',acct);store.set('theme',$('#s_theme').value);applyTheme($('#s_theme').value);$('#sheet').classList.remove('on');showCap();renderSignals();calcStock()};
+
+function size(entry,stop,lot=100,halve=false){const a=acctDefaults();const risk=a.capital*a.risk_pct/100*(halve?0.5:1);const per=entry-stop;
+  let sh=per>0?Math.floor(risk/per/lot)*lot:0;const cap=Math.floor(a.capital*a.max_position_pct/100/entry/lot)*lot;const capped=sh>cap;sh=Math.min(sh,cap);
+  return {shares:sh,lots:sh/lot,cost:sh*entry,risk:sh*per,capped,budget:risk}}
+
+/* ---------- candle chart ---------- */
+function candleSVG(c,s){
+  const W=600,H=220,padR=52,n=c.length,cw=(W-padR)/n;
+  const lv=[s.trigger,s.stop,s.target];
+  const hi=Math.max(...c.map(x=>x[2]),...lv),lo=Math.min(...c.map(x=>x[3]),...lv);
+  const y=v=>8+(hi-v)/(hi-lo||1)*(H-16);
+  let g='';
+  // EMA20 from candles
+  let e=null,k=2/21,pts=[];c.forEach((x,i)=>{e=e==null?x[4]:x[4]*k+e*(1-k);if(i>=10)pts.push(`${(i+.5)*cw},${y(e)}`)});
+  g+=`<polyline points="${pts.join(' ')}" fill="none" stroke="var(--warn)" stroke-width="1.5" opacity=".8"/>`;
+  c.forEach((x,i)=>{const[d,o,h,l,cl]=x;const up=cl>=o,col=up?'var(--up)':'var(--down)',cx=(i+.5)*cw;
+    const sig=d===s.date;
+    if(sig)g+=`<rect x="${i*cw}" y="0" width="${cw}" height="${H}" fill="var(--ink)" opacity=".08"/>`;
+    g+=`<line x1="${cx}" x2="${cx}" y1="${y(h)}" y2="${y(l)}" stroke="${col}"/>`;
+    const top=y(Math.max(o,cl)),bh=Math.max(1,Math.abs(y(o)-y(cl)));
+    g+=`<rect x="${cx-cw*.35}" y="${top}" width="${cw*.7}" height="${bh}" fill="${up?'var(--panel)':col}" stroke="${col}"/>`});
+  [['Buy',s.trigger,'var(--ink)'],['Stop',s.stop,'var(--down)'],['Target',s.target,'var(--up)']].forEach(([t,v,col])=>{
+    g+=`<line x1="0" x2="${W-padR}" y1="${y(v)}" y2="${y(v)}" stroke="${col}" stroke-dasharray="4 3"/>`+
+       `<text x="${W-padR+4}" y="${y(v)+4}" font-size="11" fill="${col}" font-family="IBM Plex Mono">${px(v)}</text>`});
+  return `<svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="Price chart with buy, stop and target lines">${g}</svg>`}
+
+/* ---------- signals ---------- */
+$('#sigFilter').onclick=e=>{const b=e.target.closest('button');if(!b)return;filter=b.dataset.f;$$('#sigFilter button').forEach(x=>x.classList.toggle('on',x===b));renderSignals()};
+const statusChip={new:['NEW','up'],pending:['DAY 2 · still valid','warn'],triggered:['TRIGGERED today','up']};
+function warrantHTML(w){return `<div class="res small" style="margin-top:8px"><div class="row" style="justify-content:space-between"><b>${esc(w.code)}</b>
+  <span class="chip">${w.moneyness} · ${w.days_left} days left</span></div>
+  <dl class="kv" style="margin:6px 0 0"><dt>Price (${w.price_source})</dt><dd>${px(w.price)}</dd>
+  ${w.at_stock_stop!=null?`<dt>If share hits stop / target</dt><dd>${px(w.at_stock_stop)} / ${px(w.at_stock_target)}</dd>`:''}
+  <dt>Effective gearing</dt><dd>${w.effective_gearing}x</dd><dt>Premium</dt><dd>${w.premium_pct}%</dd>
+  <dt>Breakeven at expiry</dt><dd>${px(w.breakeven)}</dd><dt>Delta</dt><dd>${w.delta}</dd>
+  <dt>Volatility used</dt><dd>${w.vol_used}% ${w.vol_type}</dd></dl>
+  ${w.warnings.length?`<ul class="warnlist">${w.warnings.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>`:''}</div>`}
+function renderSignals(){
+  if(!D)return;
+  const rg=D.regime||{};
+  $('#regime').innerHTML=`<div class="banner ${rg.state==='healthy'?'ok':'bad'}"><b>${esc(rg.advice)}</b><br><span class="small">${rg.breadth_above_ema50}% of stocks above their 50-day EMA${rg.index_close?` · KLCI ${rg.index_close} (${rg.index_chg_20d_pct>0?'+':''}${rg.index_chg_20d_pct}% in 20 days)`:''}</span></div>`+
+    (D._demo?`<div class="banner info"><b>Demo data.</b> These are made-up prices so you can see the layout. Real signals appear after the first daily scan runs.</div>`:'');
+  const list=D.signals.filter(s=>(filter==='all'||s.alert)&&(!famF||s.family===famF));
+  const weak=rg.state!=='healthy';
+  $('#sigList').innerHTML=list.length?list.map(s=>{
+    const p=size(s.trigger,s.stop,100,weak);const [st,sc]=statusChip[s.status]||[s.status,''];
+    const ps=s.pattern_stats||{},ss=s.stock_stats||{};
+    return `<div class="card"><div class="sig-h"><div class="grade g${s.grade}">${s.grade}</div><div class="t">
+      <div class="name">${esc(s.name)} <span class="muted mono small">${esc(s.code)}</span></div>
+      <div class="row small"><span class="chip ${sc}">${st}</span><span class="chip">${esc(s.family||'Candlestick')}</span><span class="chip">${esc(s.pattern_label)}</span>${s.family==='Candlestick'||!s.family?`<span class="chip">${esc(s.setup)}</span>`:''}${s.edge_ok?'<span class="chip up">Edge</span>':'<span class="chip">No proven edge</span>'}</div></div>
+      <div class="mono small muted" style="text-align:right">score<br><b style="color:var(--ink);font-size:16px">${s.score}</b></div></div>
+      ${candleSVG(s.candles,s)}
+      <div class="plan"><div class="e"><span>Buy-stop above</span><b>${px(s.trigger)}</b></div><div class="s"><span>Stop-loss</span><b>${px(s.stop)}</b></div><div class="g"><span>Target (${s.reward_r}R)</span><b>${px(s.target)}</b></div></div>
+      <dl class="kv"><dt>Position${weak?' (half size, weak market)':''}</dt><dd>${p.lots?`${p.lots} lots · ${rm(p.cost)}`:'Under 1 lot at your settings'}</dd>
+      <dt>Money at risk</dt><dd>${rm(p.risk)} (${s.risk_pct}% move)</dd>
+      ${p.capped?'<dt>Note</dt><dd>capped by max-in-one-stock</dd>':''}
+      <dt>Pattern backtest (all stocks)</dt><dd>${ps.n} trades · ${ps.win}% win · ${ps.avg_r>0?'+':''}${ps.avg_r}R</dd>
+      <dt>This stock + pattern</dt><dd>${ss.n?`${ss.n} trades · ${ss.win}% · ${ss.avg_r>0?'+':''}${ss.avg_r}R`:'no history'}</dd></dl>
+      <ul class="reasons">${s.reasons.map(r=>`<li>${esc(r)}</li>`).join('')}</ul>
+      ${sigExtras(s)}
+      <details><summary>How to place this trade</summary><ol class="small" style="padding-left:18px;margin:8px 0 0">
+        <li>${s.status==='triggered'?`Price already crossed ${px(s.trigger)} today. Only enter tomorrow if it is still below ${px(s.trigger+(s.target-s.trigger)*0.3)} (do not chase).`:`Place a <b>buy-stop / stop-limit</b> order at ${px(s.trigger)} (limit ${px(s.trigger+2*tick(s.trigger))}). It only fills if price confirms the pattern.`}</li>
+        <li>If not filled ${s.status==='pending'?'by today\'s close':'within 2 trading days'}, cancel it. If price closes below ${px(s.stop)} first, cancel.</li>
+        <li>Once filled, set a stop-loss at ${px(s.stop)} and a take-profit at ${px(s.target)}.</li>
+        <li>No result after 15 trading days? Exit at the close. Dead money is a cost.</li></ol></details>
+      ${s.warrants&&s.warrants.length?`<details open><summary>Call warrants on ${esc(s.name)}</summary>${s.warrants.map(warrantHTML).join('')}</details>`:''}
+    </div>`}).join(''):`<div class="card empty">${filter==='alert'?'No setup passed all the filters today.<br>That is normal. Most days have none. <br><br><button class="btn ghost" onclick="$(\'#sigFilter button[data-f=all]\').click()">Show all setups</button>':'No candlestick setups found today.'}</div>`;
+  const ex=(D.exits||[]);
+  $('#exitBox').innerHTML=ex.length?`<h2 style="margin-top:20px">Your holdings</h2>`+ex.map(x=>`<div class="card"><div class="row" style="justify-content:space-between"><b>${esc(x.name)} <span class="mono small muted">${x.code}</span></b>
+    <span class="chip ${x.action==='sell'?'down':x.action==='hold'?'':'warn'}">${x.action.replace('_',' ').toUpperCase()}</span></div>
+    <dl class="kv" style="margin-top:6px"><dt>Close / entry / stop</dt><dd>${px(x.close)} / ${px(x.entry)} / ${px(x.stop)}</dd><dt>Open result</dt><dd>${x.r_now>0?'+':''}${x.r_now}R</dd><dt>3-ATR trailing stop</dt><dd>${px(x.trail_stop)}</dd></dl>
+    ${x.message?`<p class="small" style="margin:8px 0 0">${esc(x.message)}</p>`:''}</div>`).join(''):'';
+  const wn=(D.warnings||[]);
+  $('#warnBox').innerHTML=wn.length?`<div class="card"><h3>Bearish candles on watchlist stocks</h3><p class="small muted">If you hold these, consider tightening your stop.</p>${wn.map(w=>`<div class="row small" style="padding:4px 0"><span class="chip down">${esc(w.pattern)}</span>${esc(w.name)} <span class="mono muted">${w.code} · ${px(w.close)}</span>${w.held?'<span class="chip warn">you hold</span>':''}</div>`).join('')}</div>`:'';
+  const ww=(D.warrants||[]);
+  $('#wBox').innerHTML=ww.length?`<div class="card"><h3>Your warrant watchlist</h3>${ww.map(w=>`<div class="small muted" style="margin-top:8px">${esc(w.mother_name)}</div>`+warrantHTML(w)).join('')}</div>`:'';
+}
+
+/* ---------- backtest ---------- */
+function curveSVG(v){if(!v||v.length<2)return'';const W=600,H=160,mx=Math.max(0,...v),mn=Math.min(0,...v);const y=x=>10+(mx-x)/(mx-mn||1)*(H-20);
+  const pts=v.map((x,i)=>`${i/(v.length-1)*W},${y(x)}`).join(' ');
+  return `<svg class="chart" viewBox="0 0 ${W} ${H}"><line x1="0" x2="${W}" y1="${y(0)}" y2="${y(0)}" stroke="var(--line)"/><polyline points="${pts}" fill="none" stroke="${v[v.length-1]>=0?'var(--up)':'var(--down)'}" stroke-width="2"/><text x="4" y="${y(0)-4}" font-size="11" fill="var(--muted)">0R</text><text x="${W-4}" y="14" text-anchor="end" font-size="11" fill="var(--muted)" font-family="IBM Plex Mono">${v[v.length-1]>0?'+':''}${v[v.length-1]}R</text></svg>`}
+function renderBacktest(){
+  if(!D)return;const b=D.backtest,o=b.overall,st=D.strategy;
+  $('#btIntro').textContent=`Every pattern below was tested on ${b.stocks} Bursa stocks over the last ${b.period.replace('y',' years')}, using the exact rules the scanner uses today.`;
+  $('#btOverall').innerHTML=`<div class="card"><h3>All bullish setups combined</h3><div class="stats">
+   <div class="stat"><span>Trades</span><b>${o.n}</b></div><div class="stat"><span>Win rate</span><b>${o.win}%</b></div>
+   <div class="stat"><span>Avg per trade</span><b style="color:${o.avg_r>=0?'var(--up)':'var(--down)'}">${o.avg_r>0?'+':''}${o.avg_r}R</b></div><div class="stat"><span>Profit factor</span><b>${o.pf??'–'}</b></div></div>
+   <p class="small muted" style="margin:10px 0 0">Cumulative result in R, in date order. Worst losing streak: ${o.max_losing_streak} trades in a row. Expect this.</p>${curveSVG(o.curve)}</div>`;
+  const bull=b.by_pattern.filter(p=>p.direction==='bull').sort((a,c)=>(c.avg_r??-9)-(a.avg_r??-9));
+  $('#btTable').innerHTML=`<tr><th>Pattern</th><th class="r">Trades</th><th class="r">Win</th><th class="r">Avg R</th><th class="r">PF</th><th class="r">Days</th></tr>`+
+    bull.map(p=>`<tr><td>${esc(p.label)} ${p.edge?'<span class="chip up">Edge</span>':''}<div class="small muted">${esc(p.family||'Candlestick')}</div></td><td class="r">${p.n}</td><td class="r">${p.n?p.win+'%':'–'}</td><td class="r" style="color:${(p.avg_r??0)>=0?'var(--up)':'var(--down)'}">${p.n?(p.avg_r>0?'+':'')+p.avg_r:'–'}</td><td class="r">${p.pf??'–'}</td><td class="r">${p.avg_hold??'–'}</td></tr>`).join('');
+  $('#btSetup').innerHTML=`<tr><th>Context</th><th class="r">Trades</th><th class="r">Win</th><th class="r">Avg R</th></tr>`+b.by_setup.map(p=>`<tr><td>${esc(p.label)}</td><td class="r">${p.n}</td><td class="r">${p.n?p.win+'%':'–'}</td><td class="r">${p.n?(p.avg_r>0?'+':'')+p.avg_r:'–'}</td></tr>`).join('');
+  $('#btBear').innerHTML=`<tr><th>Pattern</th><th class="r">Times</th><th class="r">Lower 10d later</th><th class="r">Avg 10d move</th></tr>`+b.by_pattern.filter(p=>p.direction==='bear').map(p=>`<tr><td>${esc(p.label)}</td><td class="r">${p.n}</td><td class="r">${p.pct_down_10d??'–'}%</td><td class="r">${p.avg_ret_10d??'–'}%</td></tr>`).join('');
+  $('#btRules').innerHTML=`<ol style="padding-left:18px;margin:0">
+   <li>Candlestick patterns must appear in context: an uptrend pulling back to the 20-day EMA, or RSI below 35 near the 60-day low. Breakout, swing and volume strategies carry their own trend and volume rules (see Learn).</li>
+   <li>Stocks need at least ${rm(st.min_avg_value_rm)} average daily traded value and price ≥ RM${st.min_price}.</li>
+   <li>Entry only if price breaks above the pattern high within ${st.entry_window_days} days (buy-stop). Gaps are filled at the open.</li>
+   <li>Stop below the pattern low minus ${st.stop_buffer_atr}×ATR. Setups needing a stop wider than ${st.max_stop_pct}% are skipped.</li>
+   <li>Target ${st.reward_r}R. If not hit in ${st.max_hold_days} days, exit at the close. If stop and target hit the same day, the test assumes the stop.</li>
+   <li>${st.cost_pct_round_trip}% round-trip costs deducted from every trade.</li>
+   <li>An "Edge" needs at least ${D.alerts_cfg.min_trades_for_edge} trades and +${D.alerts_cfg.min_expectancy_r}R average.</li></ol>
+   <p class="muted" style="margin:10px 0 0">Limits: prices are dividend-adjusted, the stock list is today's (stocks that were delisted are missing, which flatters results a little), and a 3-year test covers only a few market cycles. Treat a small edge as a hint, then confirm it in your own journal.</p>`;
+}
+
+/* ---------- calculators ---------- */
+$('#calcSeg').onclick=e=>{const b=e.target.closest('button');if(!b)return;$$('#calcSeg button').forEach(x=>x.classList.toggle('on',x===b));
+  $('#calcStock').style.display=b.dataset.c==='stock'?'':'none';$('#calcWarrant').style.display=b.dataset.c==='warrant'?'':'none'};
+function fees(v,brk){const b=Math.max(8,v*brk/100),stamp=Math.min(1000,Math.ceil(v/1000)),clr=Math.min(1000,v*0.0003);return b+stamp+clr}
+function calcStock(){const a=acctDefaults();if(!$('#cs_cap').value)$('#cs_cap').value=a.capital;if(!$('#cs_risk').value)$('#cs_risk').value=a.risk_pct;
+  const cap=+$('#cs_cap').value,rp=+$('#cs_risk').value,E=+$('#cs_entry').value,Sx=+$('#cs_stop').value,brk=+$('#cs_brk').value;
+  const T=+$('#cs_tgt').value||E+2*(E-Sx);const out=$('#cs_out');
+  if(!(E>0&&Sx>0&&E>Sx)){out.innerHTML='<span class="muted">Stop must be below entry.</span>';return}
+  const budget=cap*rp/100,per=E-Sx,sh=Math.floor(budget/per/100)*100,cost=sh*E;
+  const f=sh?fees(cost,brk)+fees(sh*T,brk):0,fstop=sh?fees(cost,brk)+fees(sh*Sx,brk):0;
+  out.innerHTML=sh?`<div class="big">${sh/100} lots <span class="muted" style="font-size:15px">(${sh.toLocaleString()} shares)</span></div>
+   <dl class="kv" style="margin-top:8px"><dt>Cost</dt><dd>${rm(cost,2)} (${(cost/cap*100).toFixed(0)}% of capital)</dd>
+   <dt>Loss if stopped (incl. fees)</dt><dd style="color:var(--down)">−${rm(sh*per+fstop,2)}</dd>
+   <dt>Profit at target (after fees)</dt><dd style="color:var(--up)">+${rm(sh*(T-E)-f,2)}</dd>
+   <dt>Reward : risk</dt><dd>${((T-E)/per).toFixed(2)} : 1</dd><dt>Win rate needed to break even</dt><dd>${(100*per/(T-E+per)).toFixed(0)}%</dd>
+   <dt>Stop distance</dt><dd>${(per/E*100).toFixed(2)}% · ${Math.round(per/tick(E))} ticks</dd></dl>
+   ${cost>cap?'<p class="small" style="color:var(--down);margin:8px 0 0">Cost exceeds capital. Use a wider budget or skip.</p>':''}`
+   :`<span>Your risk budget (${rm(budget)}) cannot cover even 1 lot with this stop (${rm(per*100)} per lot). Skip the trade or find a tighter stop.</span>`}
+['cs_cap','cs_risk','cs_entry','cs_stop','cs_tgt','cs_brk'].forEach(id=>$('#'+id).addEventListener('input',calcStock));
+
+const ncdf=x=>{const t=1/(1+0.2316419*Math.abs(x)),d=0.3989423*Math.exp(-x*x/2),p=d*t*(0.3193815+t*(-0.3565638+t*(1.781478+t*(-1.821256+t*1.330274))));return x>0?1-p:p};
+function bs(S,K,T,v,r=0.03){if(T<=0||v<=0)return[Math.max(S-K,0),S>K?1:0];const d1=(Math.log(S/K)+(r+v*v/2)*T)/(v*Math.sqrt(T)),d2=d1-v*Math.sqrt(T);return[S*ncdf(d1)-K*Math.exp(-r*T)*ncdf(d2),ncdf(d1)]}
+function iv(price,S,K,T){let lo=0.01,hi=3;if(bs(S,K,T,hi)[0]<price)return null;for(let i=0;i<60;i++){const m=(lo+hi)/2;bs(S,K,T,m)[0]>price?hi=m:lo=m}return(lo+hi)/2}
+function calcWarrant(){const S=+$('#cw_S').value,K=+$('#cw_K').value,R=+$('#cw_ratio').value,W=+$('#cw_W').value,exp=$('#cw_exp').value,ms=+$('#cw_mstop').value,mt=+$('#cw_mtgt').value;
+  const out=$('#cw_out');if(!(S>0&&K>0&&R>0&&W>0&&exp)){out.innerHTML='<span class="muted">Fill in all fields.</span>';return}
+  const days=Math.round((new Date(exp)-new Date())/864e5),T=Math.max(days,0)/365;
+  const vol=iv(W*R,S,K,T)||0.3;const[theo,delta]=bs(S,K,T,vol);
+  const gear=S/(W*R),eg=delta*gear,prem=((W*R+K)-S)/S*100,be=W*R+K;const t2=Math.max(T-10/365,0);
+  const wS=bs(ms,K,t2,vol)[0]/R,wT=bs(mt,K,t2,vol)[0]/R;
+  const a=acctDefaults(),budget=a.capital*a.risk_pct/100,per=W-wS,units=per>0?Math.floor(budget/per/100)*100:0;
+  const warns=[];if(days<90)warns.push('Under 3 months to expiry: time decay accelerates. Prefer 6+ months for swing trades.');
+  if(prem>25)warns.push('Premium above 25%: the share must rally hard just to break even at expiry.');
+  if(W<0.02)warns.push('Price under 2 sen: each tick is a huge % move and spreads eat your profit.');
+  if(delta<0.3)warns.push('Delta under 0.3: the warrant barely moves when the share moves. Deep out-of-the-money.');
+  out.innerHTML=`<dl class="kv"><dt>Days to expiry</dt><dd>${days}</dd><dt>Implied volatility</dt><dd>${(vol*100).toFixed(1)}%</dd>
+   <dt>Gearing / effective gearing</dt><dd>${gear.toFixed(1)}x / ${eg.toFixed(1)}x</dd><dt>Delta</dt><dd>${delta.toFixed(2)}</dd>
+   <dt>Premium</dt><dd>${prem.toFixed(1)}%</dd><dt>Breakeven at expiry</dt><dd>${px(be)}</dd><dt>${S>K?'In':'Out of'} the money by</dt><dd>${Math.abs((S-K)/K*100).toFixed(1)}%</dd>
+   <dt>Warrant if share hits stop ${px(ms)}</dt><dd style="color:var(--down)">≈${px(wS)} (${((wS/W-1)*100).toFixed(0)}%)</dd>
+   <dt>Warrant if share hits target ${px(mt)}</dt><dd style="color:var(--up)">≈${px(wT)} (+${((wT/W-1)*100).toFixed(0)}%)</dd>
+   <dt>Units for ${rm(budget)} risk</dt><dd>${units?units.toLocaleString()+' · '+rm(units*W):'–'}</dd></dl>
+   ${warns.length?`<ul class="warnlist">${warns.map(x=>`<li>${x}</li>`).join('')}</ul>`:''}
+   <p class="small muted" style="margin:8px 0 0">Estimates assume the issuer prices fairly and ~2 weeks pass. Real quotes depend on the issuer's market making, especially near expiry.</p>`}
+(function(){const d=new Date();d.setMonth(d.getMonth()+6);$('#cw_exp').value=d.toISOString().slice(0,10)})();
+['cw_S','cw_K','cw_ratio','cw_W','cw_exp','cw_mstop','cw_mtgt'].forEach(id=>$('#'+id).addEventListener('input',calcWarrant));
+
+/* ---------- lessons ---------- */
+function mini(bars){/* bars: [o,h,l,c] in 0..10 */const n=bars.length,cw=110/(n+1);let g='';
+  bars.forEach((b,i)=>{const[o,h,l,c]=b,up=c>=o,col=up?'var(--up)':'var(--down)',x=(i+1)*cw,y=v=>72-v*6.4;
+    g+=`<line x1="${x}" x2="${x}" y1="${y(h)}" y2="${y(l)}" stroke="${col}" stroke-width="1.5"/><rect x="${x-cw*.3}" y="${y(Math.max(o,c))}" width="${cw*.6}" height="${Math.max(1.5,Math.abs(o-c)*6.4)}" fill="${up?'var(--panel)':col}" stroke="${col}" stroke-width="1.5"/>`});
+  return `<svg viewBox="0 0 110 80">${g}</svg>`}
+const PATS=[
+ ['Bullish Engulfing',[[6,6.5,4.5,5],[7,7.5,5.5,6.2],[6,6.3,4,4.4],[4.1,7.6,3.8,7.3]],'A green body that completely covers the previous red body. Buyers overpowered sellers in one session.'],
+ ['Hammer',[[7,7.4,5.5,6],[6,6.3,4.5,5],[4.8,5.2,2,5.1]],'Small body near the top, lower shadow at least twice the body. Sellers pushed price down, buyers pushed it all the way back.'],
+ ['Morning Star',[[8,8.3,5.4,5.6],[5.1,5.6,4.4,5],[5.3,7.6,5,7.4]],'Big red candle, a small indecision candle, then a strong green candle closing above the middle of the first. A three-day turn.'],
+ ['Piercing Line',[[7.5,7.8,4.8,5],[4.8,6.8,4.5,6.6]],'After a big red candle, price opens at or below its close and then closes above its midpoint.'],
+ ['Three White Soldiers',[[3,4.6,2.8,4.4],[4.3,6,4.1,5.8],[5.7,7.5,5.5,7.3]],'Three solid green candles, each closing higher with small upper shadows. Steady, persistent buying.'],
+ ['Bullish Harami',[[8,8.2,4.3,4.5],[5,6.4,4.8,6.2]],'A small green body sitting inside the previous large red body. Selling has stalled; needs the breakout to confirm.'],
+ ['Bearish Engulfing / Shooting Star',[[4,6,3.8,5.8],[6.2,6.5,3.6,3.8],[4,8,3.8,4.4]],'Mirror images of the bullish patterns. Used here as exit warnings for stocks you hold, not as short trades.']];
+const LESSONS=[
+ ['Reading one candle','<p>Each candle is one day. The <b>body</b> runs from open to close: hollow/green if it closed higher, filled/red if lower. The thin <b>shadows</b> show the day\'s high and low.</p><p>A long lower shadow means sellers pushed price down but buyers took it back. A long upper shadow means the opposite. The story of who won the day is in the shape.</p>'],
+ ['The patterns this app scans','<div>'+PATS.map(p=>`<div class="pat">${mini(p[1])}<div><b>${p[0]}</b><p class="small" style="margin:2px 0 0">${p[2]}</p></div></div>`).join('')+'</div>'],
+ ['Context beats the pattern','<p>A hammer in the middle of nowhere means very little. The same hammer at support, in an uptrend, after a calm pullback, means a lot. The scanner only takes patterns in two places:</p><ul class="small"><li><b>Trend pullback:</b> 20-day EMA above 50-day EMA, 50-day rising, price dips back to the 20-day EMA, RSI 35 to 62.</li><li><b>Oversold bounce:</b> RSI under 35 near the 60-day low. Riskier: you are catching a falling knife, so check the Backtest tab to see if it pays.</li></ul>'],
+ ['Wait for confirmation','<p>Never buy the pattern candle itself. Place a <b>buy-stop</b> 1 tick above its high. If buyers are real, price will break that high in the next 1 to 2 days and your order fills. If not, nothing happens and you lose nothing.</p><p>This one rule filters out many failed patterns.</p>'],
+ ['The stop-loss is the trade','<p>Your stop goes just below the pattern low (with a small ATR buffer). That is the price where the pattern is proven wrong. Decide it <i>before</i> you buy, put it in the system, and never move it lower.</p><p>Small losses are the cost of doing business. Big losses end trading careers.</p>'],
+ ['Position sizing: the 1% rule','<p>Risk the same small slice of your capital on every trade, usually 0.5 to 1%. With RM20,000 and 1%, you risk RM200.</p><p><span class="mono">Shares = RM200 ÷ (entry − stop)</span>, rounded down to 100-share lots. A wide stop means fewer shares. Ten losses in a row then cost about 10%, not your account.</p><p>The Calculator tab does this for you, including Bursa fees and stamp duty.</p>'],
+ ['Reading the backtest','<p><b>R</b> is one unit of risk. +2R means you made twice what you risked. <b>Expectancy</b> (avg R) is what you earn per trade on average: +0.2R × 50 trades × RM200 = RM2,000.</p><p>With a 2R target you only need to win above 33% to break even. A 40% win rate with 2R targets is a good system. Expect losing streaks of 6 to 10 trades; the backtest shows the worst one.</p>'],
+ ['Warrants: leverage cuts both ways','<p>A call warrant lets you control more shares with less money. <b>Effective gearing</b> 5x means a 1% move in the share moves the warrant about 5%, both up and down.</p><ul class="small"><li><b>Premium:</b> how much the share must rise by expiry just to break even.</li><li><b>Time decay:</b> warrants lose value every day, fastest in the last 3 months. For swing trades prefer 6+ months to expiry.</li><li><b>Delta:</b> 0.5 or higher (near or in the money) tracks the share better.</li><li>Size warrants by the same 1% rule using the warrant\'s price at your <i>share\'s</i> stop. The Calculator tab does this.</li></ul>'],
+ ['Breakouts',"<p>A breakout is price closing above a level it could not pass before. The scanner runs two kinds:</p><ul class=\"small\"><li><b>20-day volume breakout:</b> closes above the highest high of the last 20 days, on at least 1.5x normal volume, near the day's high, in a stock that is already above its 50- and 200-day EMAs.</li><li><b>Tight base breakout:</b> the stock moved sideways in a narrow range (under 15%) for 30 days while daily swings got smaller, then broke out on volume. Quiet bases often lead to the strongest moves.</li></ul><p>Breakouts without volume fail often. Breakouts in a weak market fail more often. The stop goes under the breakout day's low.</p>"],
+ ['Swing trading',"<p>Swing trades last days to a few weeks and try to catch one 'swing' of an uptrend. The <b>swing pullback reversal</b> waits for a stock in an uptrend to dip for 3 to 4 days towards its 20-day EMA, then buys when a day closes above the previous day's high, showing that buyers are back.</p><p>Your stop goes under the low of the dip. If the uptrend is real, the next swing usually reaches the old high or beyond.</p>"],
+ ['Reading volume',"<p>Volume shows conviction. Price moves on low volume are easy to reverse; moves on heavy volume mean big money is involved.</p><ul class=\"small\"><li><b>Volume ratio:</b> today vs the 20-day average. Above 1.5x is notable, above 2.5x is unusual.</li><li><b>Up/down volume:</b> total volume on up days ÷ down days over 20 days. Above 1.2 = <b>accumulation</b> (buyers in control), below 0.8 = <b>distribution</b> (selling).</li><li><b>OBV (on-balance volume):</b> a running total that adds volume on up days and subtracts it on down days. Rising OBV with a flat price often comes before a breakout.</li><li><b>Pocket pivot:</b> an up day whose volume beats every down day of the past 10, near the 20-day EMA. An early sign of institutions buying.</li><li><b>Volume surge:</b> 2.5x volume, +3% and closing near the high. Check the news: there is usually a reason.</li></ul>"],
+ ['Sentiment and fundamentals',"<p><b>Sentiment</b> (Market tab) tells you whether the tide is with you. When most stocks are falling, even good setups fail. The 0 to 100 gauge combines breadth, new highs vs lows, advancers vs decliners and the KLCI trend.</p><p><b>Fundamentals</b> (Research tab) tell you what you own. A technical setup in a company with rising profit, fair valuation and low debt has a tailwind; the same setup in a loss-maker with heavy debt can collapse on one bad quarter.</p><p>Simple rules: avoid buying within 10 days of quarterly results unless you accept a gap; prefer grade A/B fundamentals for trades you might hold longer; read negative headlines before placing an order.</p>"],
+ ['Pick your holding period',"<p>Each holding period has its own rules, and mixing them is how traders lose money (a contra that turns into a 'long-term investment').</p><ul class=\"small\"><li><b>Contra (1-3 days):</b> buy and sell before payment is due on T+2. Pure momentum. Smallest size (0.5% risk), strict stop, sell by T+2 no matter what. Never average down. Contra losses must be paid in cash.</li><li><b>Short term (up to 1 month):</b> swing, breakout and candlestick setups with a 2R target and a 15-day time exit.</li><li><b>Mid term (1-3 months):</b> trend leaders. Let winners run and exit only when the trend breaks (close below the 50-day EMA). Win rate is lower, but the average win is much bigger than the average loss.</li><li><b>Long term:</b> companies with good fundamentals and a moat, bought near their long-term average. Sized by allocation, reviewed after each quarterly result.</li></ul>"],
+ ['Hot money, institutions and insiders',"<ul class=\"small\"><li><b>Hot money</b> is fast, speculative buying: turnover jumps to several times normal, often in small caps, often around news or rumours. It can run hard and collapse just as fast. Bursa UMA (unusual market activity) queries are a warning sign.</li><li><b>Institutional money</b> (EPF, KWAP, PNB, foreign funds) moves slower and in size. Weekly fund-flow reports show foreign vs local institution vs retail net buying by sector. Sustained foreign buying in a sector is a tailwind.</li><li><b>Money-flow indicators</b> estimate this from price and volume: CMF (above 0 = buying pressure), MFI (above 80 overheated, below 20 washed out) and accumulation vs distribution days (big-volume up days vs down days).</li><li><b>Insider dealings</b> (directors and substantial shareholders buying or selling) are filed with Bursa. Directors buying with their own money is a strong signal. Selling has many reasons, but <i>forced</i> selling of pledged shares is a red flag.</li><li><b>Corporate events</b> that move prices: index inclusion, private placements (dilution), rights issues, takeovers, large contract wins and quarterly results.</li></ul>"],
+ ['Market regime','<p>When fewer than ~45% of stocks are above their 50-day EMA, or the KLCI is below its own, most breakouts fail. The app halves your size automatically and tells you. Sitting out weak markets is a skill.</p>'],
+ ['Your daily routine (15 minutes)','<ol class="small" style="padding-left:18px"><li>After 6:30 pm, read the Telegram alert.</li><li>Open each A/B setup, look at the chart: does it make sense to you?</li><li>Check the Market tab (sentiment, sector leaders) and each stock\'s news and fundamentals. Skip if results are due.</li><li>Place buy-stop orders for the next morning with stop and target.</li><li>Update holdings in config.json when you enter or exit. Log every trade in the Journal.</li><li>Once a month, review your journal: average R, mistakes, rules broken.</li></ol>']];
+$('#lessons').innerHTML=LESSONS.map((l,i)=>`<div class="card lesson"><details ${i===0?'open':''} style="border:0;margin:0;padding:0"><summary style="list-style:none"><h3 style="margin:0"><span class="n">${i+1}</span>${l[0]}</h3></summary><div style="margin-top:10px">${l[1]}</div></details></div>`).join('');
+
+/* ---------- freedom ---------- */
+function calcFF(){const exp=+$('#ff_exp').value,now=+$('#ff_now').value,add=+$('#ff_add').value,ret=+$('#ff_ret').value/100,inf=+$('#ff_inf').value/100,wr=+$('#ff_wr').value/100;
+  const real=(1+ret)/(1+inf)-1,target=exp*12/wr;let bal=now,yrs=null;const ser=[now];
+  for(let y=1;y<=50;y++){for(let m=0;m<12;m++)bal=bal*(1+real/12)+add;ser.push(bal);if(yrs==null&&bal>=target)yrs=y}
+  const pct=Math.min(100,now/target*100);
+  $('#ff_out').innerHTML=`<dl class="kv"><dt>Your freedom number (today's RM)</dt><dd><b>${rm(target)}</b></dd><dt>Progress</dt><dd>${pct.toFixed(1)}%</dd>
+   <dt>Years to get there</dt><dd><b>${yrs==null?'50+':yrs}</b></dd><dt>Return after inflation</dt><dd>${(real*100).toFixed(1)}%</dd>
+   <dt>Each extra RM500/month saves</dt><dd>${(()=>{let b=now,y=null;for(let k=1;k<=50;k++){for(let m=0;m<12;m++)b=b*(1+real/12)+add+500;if(b>=target){y=k;break}}return yrs&&y?(yrs-y)+' years':'–'})()}</dd></dl>
+   <div style="height:8px;background:var(--chip);border-radius:9px;margin-top:10px;overflow:hidden"><div style="height:100%;width:${pct}%;background:var(--accent)"></div></div>`;
+  const N=Math.min(50,(yrs||40)+5),v=ser.slice(0,N+1),W=600,H=220,mx=Math.max(target*1.1,...v),y=x=>10+(mx-x)/mx*(H-30),xs=i=>30+i/N*(W-40);
+  let g=`<line x1="30" x2="${W-10}" y1="${y(target)}" y2="${y(target)}" stroke="var(--warn)" stroke-dasharray="5 4"/><text x="${W-10}" y="${y(target)-6}" text-anchor="end" font-size="12" fill="var(--warn)">Freedom ${rm(target)}</text>`;
+  g+=`<polyline points="${v.map((b,i)=>xs(i)+','+y(b)).join(' ')}" fill="none" stroke="var(--accent)" stroke-width="2.5"/>`;
+  for(let i=0;i<=N;i+=5)g+=`<text x="${xs(i)}" y="${H-4}" font-size="11" fill="var(--muted)" text-anchor="middle">${i}y</text>`;
+  $('#ff_chart').innerHTML=g;store.set('ff',['ff_exp','ff_now','ff_add','ff_ret','ff_inf','ff_wr'].map(id=>$('#'+id).value))}
+(store.get('ff',null)||[]).forEach((v,i)=>{const id=['ff_exp','ff_now','ff_add','ff_ret','ff_inf','ff_wr'][i];if(v!=null)$('#'+id).value=v});
+['ff_exp','ff_now','ff_add','ff_ret','ff_inf','ff_wr'].forEach(id=>$('#'+id).addEventListener('input',calcFF));
+
+/* ---------- journal ---------- */
+let J=store.get('journal',[]);
+function renderJ(){const closed=J.filter(t=>t.exit);const rs=closed.map(t=>(t.exit-t.entry)/(t.entry-t.stop));
+  const pl=closed.reduce((s,t)=>s+(t.exit-t.entry)*t.qty,0),win=rs.filter(r=>r>0).length;
+  $('#j_stats').innerHTML=closed.length?`<div class="stats" style="margin-bottom:12px"><div class="stat"><span>Closed trades</span><b>${closed.length}</b></div><div class="stat"><span>Win rate</span><b>${(win/closed.length*100).toFixed(0)}%</b></div><div class="stat"><span>Avg R</span><b style="color:${rs.reduce((a,b)=>a+b,0)>=0?'var(--up)':'var(--down)'}">${(rs.reduce((a,b)=>a+b,0)/rs.length).toFixed(2)}</b></div><div class="stat"><span>P&amp;L (before fees)</span><b>${rm(pl)}</b></div></div>`:'';
+  $('#j_tbl').innerHTML=J.length?`<tr><th>Date</th><th>Stock</th><th class="r">Entry</th><th class="r">Stop</th><th class="r">Exit</th><th class="r">R</th><th></th></tr>`+J.map((t,i)=>{const r=t.exit?(t.exit-t.entry)/(t.entry-t.stop):null;
+    return `<tr><td class="small">${t.date}</td><td>${esc(t.code)}<div class="small muted">${esc(t.pat)}</div></td><td class="r">${px(t.entry)}</td><td class="r">${px(t.stop)}</td><td class="r">${t.exit?px(t.exit):`<button class="iconbtn" data-close="${i}">close</button>`}</td><td class="r" style="color:${r==null?'':r>=0?'var(--up)':'var(--down)'}">${r==null?'open':r.toFixed(2)}</td><td><button class="iconbtn" data-del="${i}" aria-label="Delete">✕</button></td></tr>`}).join(''):'<tr><td class="muted">No trades yet.</td></tr>'}
+$('#j_add').onclick=()=>{const t={date:new Date().toISOString().slice(0,10),code:$('#j_code').value.trim(),pat:$('#j_pat').value.trim(),entry:+$('#j_entry').value,stop:+$('#j_stop').value,exit:+$('#j_exit').value||null,qty:+$('#j_qty').value||0};
+  if(!t.code||!(t.entry>t.stop)){alertBox('Enter a stock, and an entry above the stop.');return}J.unshift(t);store.set('journal',J);['j_code','j_pat','j_entry','j_stop','j_exit','j_qty'].forEach(id=>$('#'+id).value='');renderJ()};
+$('#j_tbl').onclick=e=>{const d=e.target.dataset;if(d.del!=null){J.splice(+d.del,1)}else if(d.close!=null){const td=e.target.parentNode;td.innerHTML=`<input type="number" step="0.005" style="width:70px" class="mono" data-exitin="${d.close}"> <button class="iconbtn" data-save="${d.close}">ok</button>`;return}
+  else if(d.save!=null){const v=+$(`[data-exitin="${d.save}"]`).value;if(v>0)J[+d.save].exit=v}else return;store.set('journal',J);renderJ()};
+$('#j_csv').onclick=()=>{const rows=[['date','code','pattern','entry','stop','exit','units','R']].concat(J.map(t=>[t.date,t.code,t.pat,t.entry,t.stop,t.exit??'',t.qty,t.exit?((t.exit-t.entry)/(t.entry-t.stop)).toFixed(2):'']));
+  const blob=new Blob([rows.map(r=>r.map(x=>`"${String(x).replace(/"/g,'""')}"`).join(',')).join('\n')],{type:'text/csv'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='bebas-journal.csv';a.click()};
+function alertBox(m){const b=document.createElement('div');b.className='banner bad';b.textContent=m;$('#journal').prepend(b);setTimeout(()=>b.remove(),3000)}
+
+/* ---------- shared helpers for market / research ---------- */
+const pct=(x,d=1)=>x==null||isNaN(x)?'–':`${x>0?'+':''}${Number(x).toFixed(d)}%`;
+const cls=x=>x>0?'pos':x<0?'neg':'';
+const bigRM=x=>x==null?'–':x>=1e9?'RM'+(x/1e9).toFixed(1)+'b':x>=1e6?'RM'+(x/1e6).toFixed(0)+'m':rm(x);
+function gradeBox(g,size=26){return `<span class="g g${g||'N'}" style="width:${size}px;height:${size}px;border-radius:7px;display:inline-grid;place-items:center;font-weight:700;font-size:${size>30?18:13}px">${g||'–'}</span>`}
+function md(t){const lines=esc(t||'').split('\n');let h='',inList=false;
+  const inline=x=>x.replace(/\*\*(.+?)\*\*/g,'<b>$1</b>').replace(/\[([^\]]+)\]\((https?:[^)\s]+)\)/g,'<a href="$2" target="_blank" rel="noopener">$1</a>');
+  for(const l of lines){const m=l.match(/^\s*[-*•]\s+(.*)/);
+    if(m){if(!inList){h+='<ul>';inList=true}h+=`<li>${inline(m[1])}</li>`;continue}
+    if(inList){h+='</ul>';inList=false}
+    if(/^#{1,3}\s/.test(l))h+=`<h2>${inline(l.replace(/^#+\s*/,''))}</h2>`;else if(l.trim())h+=`<p>${inline(l)}</p>`}
+  return h+(inList?'</ul>':'')}
+function newsList(items,n=6){if(!items||!items.length)return '<p class="small muted">No recent headlines found.</p>';
+  return `<ul>${items.slice(0,n).map(i=>`<li><span class="tdot ${i.tone}">${i.tone==='positive'?'▲':i.tone==='negative'?'▼':'●'}</span><div><a href="${esc(i.url)}" target="_blank" rel="noopener">${esc(i.title)}</a><div class="d">${esc(i.source)} · ${esc(i.published)}</div></div></li>`).join('')}</ul>`}
+function lineSVG(v,h=150,col){if(!v||v.length<2)return'';const W=600,mx=Math.max(...v),mn=Math.min(...v),y=x=>8+(mx-x)/(mx-mn||1)*(h-16);
+  const c=col||(v[v.length-1]>=v[0]?'var(--up)':'var(--down)');
+  return `<svg class="chart" viewBox="0 0 ${W} ${h}"><polyline points="${v.map((x,i)=>`${i/(v.length-1)*W},${y(x)}`).join(' ')}" fill="none" stroke="${c}" stroke-width="2"/><text x="${W-2}" y="${y(v[v.length-1])-6}" text-anchor="end" font-size="12" fill="var(--muted)" font-family="IBM Plex Mono">${px(v[v.length-1])}</text></svg>`}
+
+/* ---------- signal card extras: volume, fundamentals, news, AI ---------- */
+$('#famFilter').onclick=e=>{const b=e.target.closest('button');if(!b)return;famF=b.dataset.g;$$('#famFilter button').forEach(x=>x.classList.toggle('on',x===b));renderSignals()};
+function sigExtras(s){let h='';const v=s.volume;
+  if(v)h+=`<div class="mini"><div>Volume today<b>${v.ratio}x</b></div><div>Up/down vol 20d<b>${v.updown_20d}</b></div><div>OBV<b>${v.obv_trend}</b></div><div>Money flow<b class="${v.label==='Accumulation'?'pos':v.label==='Distribution'?'neg':''}">${v.label}</b></div></div>`;
+  const f=s.fundamentals;
+  if(f&&f.score!=null)h+=`<div class="row" style="margin-top:10px;gap:10px">${gradeBox(f.grade)}<div class="small"><b>Fundamentals ${f.score}/100</b> · P/E ${f.pe?f.pe.toFixed(1):'–'}${f.sector_pe?` (sector ${f.sector_pe})`:''} · DY ${f.dividend_yield!=null?f.dividend_yield+'%':'–'} · Profit ${pct(f.ni_yoy_ttm,0)} y/y</div></div>
+    ${f.concerns&&f.concerns.length?`<ul class="warnlist">${f.concerns.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>`:''}`;
+  if(s.ai_verdict)h+=`<div class="ai small"><span class="muted">AI research · ${esc(s.ai_date)}</span><div class="v">${esc(s.ai_verdict)}</div></div>`;
+  if(s.news&&s.news.length)h+=`<details class="news"><summary>Latest news (${s.news.length})</summary>${newsList(s.news,4)}</details>`;
+  h+=`<div style="margin-top:10px"><button class="btn ghost" onclick="openResearch('${esc(s.ticker)}')">Full company research →</button></div>`;
+  return h}
+
+/* ---------- market tab ---------- */
+function gauge(score,label){const a=Math.PI*(1-score/100),cx=150,cy=130,r=105,x=cx+r*Math.cos(a),y=cy-r*Math.sin(a);
+  const seg=(s0,s1,c)=>{const a0=Math.PI*(1-s0/100),a1=Math.PI*(1-s1/100);return `<path d="M${cx+r*Math.cos(a0)} ${cy-r*Math.sin(a0)} A${r} ${r} 0 0 1 ${cx+r*Math.cos(a1)} ${cy-r*Math.sin(a1)}" stroke="${c}" stroke-width="16" fill="none"/>`};
+  return `<svg viewBox="0 0 300 160" style="width:100%;max-width:320px;display:block;margin:0 auto">${seg(0,20,'var(--down)')}${seg(20,40,'#e0915a')}${seg(40,60,'var(--chip)')}${seg(60,80,'#7cc59f')}${seg(80,100,'var(--up)')}
+   <line x1="${cx}" y1="${cy}" x2="${x}" y2="${y}" stroke="var(--ink)" stroke-width="3" stroke-linecap="round"/><circle cx="${cx}" cy="${cy}" r="6" fill="var(--ink)"/>
+</svg><div style="text-align:center;margin-top:-4px"><span class="big">${score}</span> <b style="font-size:17px">${esc(label)}</b></div>`}
+function accumWatch(){
+  const rows=(D.stocks||[]).filter(x=>x.flow&&x.flow.accum_score!=null);
+  if(!rows.length)return'<div class="card"><h3>Who is accumulating</h3><p class="small muted">Appears after the next scan.</p></div>';
+  const buy=[...rows].sort((a,b)=>b.flow.accum_score-a.flow.accum_score).slice(0,8);
+  const sell=[...rows].sort((a,b)=>a.flow.accum_score-b.flow.accum_score).slice(0,4);
+  const line=x=>{const f=x.flow,cl=f.accum_score>=58?'pos':f.accum_score<=42?'neg':'';
+    return `<div class="li" style="cursor:pointer;display:block" onclick="openResearch('${esc(x.ticker)}')">
+      <div style="display:flex;justify-content:space-between;gap:8px"><span>${esc(x.name)} <span class="muted mono small">${x.code}</span>${f.hot_money?' <span class="chip down">🔥 hot</span>':''}</span><span class="mono"><b class="${cl}">${f.accum_score}</b> <span class="small muted">${esc(f.accum_label)}</span></span></div>
+      <div class="meter" style="margin:6px 0 2px"><i style="left:${f.accum_score}%"></i></div>
+      <div class="small muted mono">CMF ${f.cmf20>0?'+':''}${f.cmf20} · acc/dist ${f.acc_days_25}/${f.dist_days_25} · turnover ${f.turnover_surge}x · 5d ${pct(f.r5)}</div></div>`};
+  return `<div class="card"><h3>Who is accumulating</h3>
+    <p class="small muted">Each stock scored 0–100 on money flow. Above 58 means buyers are in control; below 42 means sellers are. Tap a stock for details. Scores are a read of volume and price, not proof of who is buying.</p>
+    <p class="small" style="margin:6px 0 0"><b>Strongest accumulation</b></p>${buy.map(line).join('')}
+    <p class="small" style="margin:10px 0 0"><b>Strongest distribution (selling)</b></p>${sell.map(line).join('')}</div>`}
+function renderMarket(){if(!D||!D.market){$('#mkTop').innerHTML='<div class="card empty">Market data appears after the next scan.</div>';return}
+  const m=D.market,se=m.sentiment,ix=m.index||{};
+  $('#mkDate').textContent=`Close of ${D.data_date} · ${D.scanned} liquid Bursa stocks`;
+  $('#mkTop').innerHTML=`<div class="card">${gauge(se.score,se.label)}<p style="margin-top:8px">${esc(m.summary)}</p>
+    <details><summary>What makes up the score</summary>${Object.entries(se.components).map(([k,v])=>`<div class="comp"><span>${esc(k)}</span><div class="bar"><i style="width:${Math.max(0,Math.min(100,v))}%"></i></div><span class="mono">${Math.round(v)}</span></div>`).join('')}
+    <p class="small muted">Fear (below 40) often means bargains for patient investors but failed breakouts for traders. Greed (above 70) means trends work well but chasing is risky.</p></details></div>
+    ${ix.close?`<div class="card"><div class="row" style="justify-content:space-between"><h3 style="margin:0">FBM KLCI</h3><span class="mono"><b>${ix.close.toLocaleString('en-MY',{minimumFractionDigits:2})}</b> <span class="${cls(ix.chg_1d)}">${pct(ix.chg_1d,2)}</span></span></div>
+      ${lineSVG(ix.closes,140)}<div class="mini"><div>5 days<b class="${cls(ix.chg_5d)}">${pct(ix.chg_5d)}</b></div><div>20 days<b class="${cls(ix.chg_20d)}">${pct(ix.chg_20d)}</b></div><div>vs 50-day EMA<b>${ix.above_ema50?'Above':'Below'}</b></div><div>RSI<b>${ix.rsi}</b></div></div></div>`:''}
+    <div class="card"><h3>Market breadth</h3><div class="stats"><div class="stat"><span>Up / down today</span><b><span class="pos">${m.advancers}</span>/<span class="neg">${m.decliners}</span></b></div>
+      <div class="stat"><span>Above 50-day EMA</span><b>${m.pct_above_ema50}%</b></div><div class="stat"><span>Above 200-day EMA</span><b>${m.pct_above_ema200}%</b></div>
+      <div class="stat"><span>52w highs / lows</span><b><span class="pos">${m.new_52w_highs}</span>/<span class="neg">${m.new_52w_lows}</span></b></div></div></div>`;
+  $('#mkTop').insertAdjacentHTML('beforeend',accumWatch());
+  const heat=x=>{const a=Math.min(Math.abs(x)/8,1)*0.55;return `background:${x>=0?`rgba(15,138,95,${a})`:`rgba(194,65,45,${a})`}`};
+  $('#mkSect').innerHTML=`<tr><th>Sector</th><th class="r">1d</th><th class="r">5d</th><th class="r">20d</th><th class="r">&gt;50EMA</th></tr>`+
+    m.sectors.map(x=>`<tr><td>${esc(x.sector)} <span class="muted small">${x.n}</span></td><td class="r" style="${heat(x.r1*3)}">${pct(x.r1)}</td><td class="r" style="${heat(x.r5*1.5)}">${pct(x.r5)}</td><td class="r" style="${heat(x.r20)}">${pct(x.r20)}</td><td class="r">${x.pct_above_ema50}%</td></tr>`).join('');
+  const li=(arr,f)=>arr.length?arr.map(x=>`<div class="li" style="cursor:pointer" onclick="openResearch('${esc(x.ticker)}')"><span>${esc(x.name)} <span class="muted mono small">${x.code}</span></span><span class="mono">${f(x)}</span></div>`).join(''):'<p class="small muted">None today.</p>';
+  $('#mkGain').innerHTML=li(m.gainers,x=>`<span class="pos">${pct(x.r1)}</span>`);$('#mkLose').innerHTML=li(m.losers,x=>`<span class="neg">${pct(x.r1)}</span>`);
+  $('#mkVol').innerHTML=li(m.unusual_volume,x=>`${x.vr}x · <span class="${cls(x.r1)}">${pct(x.r1)}</span>`);
+  const n=D.news;$('#newsTone').textContent=n?`Last 2 days · headline tone: ${n.tone} (${n.positive} positive, ${n.negative} negative). Tone is a rough keyword read, not analysis.`:'';
+  $('#mkNews').innerHTML=n?newsList(n.items,15):'<p class="small muted">News appears after the next scan.</p>';
+  $('#mkFlow').innerHTML=D.flow_news?newsList(D.flow_news,6):'<p class="small muted">Appears after the next scan.</p>'}
+
+/* ---------- research tab ---------- */
+$('#rsQ').addEventListener('input',renderRsList);
+$('#rsSort').onclick=e=>{const b=e.target.closest('button');if(!b)return;rsSort=b.dataset.o;$$('#rsSort button').forEach(x=>x.classList.toggle('on',x===b));renderRsList()};
+function rsRows(){const rows=(D&&D.stocks)||[];const q=$('#rsQ').value.trim().toLowerCase();
+  return rows.filter(r=>!q||r.code.includes(q)||r.name.toLowerCase().includes(q)).map(r=>({...r,f:(F.stocks||{})[r.ticker]}))}
+function renderRsList(){const rows=rsRows();const key={score:r=>r.f&&r.f.score&&r.f.score.score!=null?r.f.score.score:-1,r20:r=>r.r20,dy:r=>r.f&&r.f.dividend_yield!=null?r.f.dividend_yield:-1,pe:r=>r.f&&r.f.pe>0?-r.f.pe:-999}[rsSort];
+  rows.sort((a,b)=>key(b)-key(a));
+  $('#rsRows').innerHTML=rows.length?rows.map(r=>{const sc=r.f&&r.f.score||{};
+    return `<div class="srow" onclick="openResearch('${esc(r.ticker)}')"><div><b>${esc(r.name)}</b> <span class="mono small muted">${r.code}</span><div class="small muted">${esc(r.sector)}${r.f&&r.f.pe?` · P/E ${r.f.pe.toFixed(1)}`:''}${r.f&&r.f.dividend_yield!=null?` · DY ${r.f.dividend_yield}%`:''}${RS[r.ticker]?' · 🧠':''}</div></div>
+      <div class="mono small" style="text-align:right">${px(r.close)}<div class="${cls(r.r20)}">${pct(r.r20)} 20d</div></div>${gradeBox(sc.grade)}</div>`}).join(''):'<p class="muted small" style="padding:10px">No stocks match.</p>'}
+function openResearch(t){const b=$('#nav button[data-t=research]');b.click();showResearch(t)}
+function backToList(){$('#rsDetail').style.display='none';$('#rsList').style.display=''}
+function qBars(q){q=(q||[]).filter(x=>x.revenue!=null||x.net_income!=null);if(q.length<2)return '<p class="small muted">Quarterly figures not available from Yahoo for this stock.</p>';
+  const W=600,H=170,n=q.length,bw=W/n,mxR=Math.max(...q.map(x=>Math.abs(x.revenue||0)),1),mxN=Math.max(...q.map(x=>Math.abs(x.net_income||0)),1);let g='';
+  q.forEach((x,i)=>{const hr=(x.revenue||0)/mxR*100,hn=Math.abs(x.net_income||0)/mxN*100,x0=i*bw+bw*.15;
+    g+=`<rect x="${x0}" y="${120-hr}" width="${bw*.32}" height="${hr}" fill="var(--chip)" stroke="var(--muted)"/>`+
+       `<rect x="${x0+bw*.36}" y="${120-hn}" width="${bw*.32}" height="${hn}" fill="${(x.net_income||0)>=0?'var(--up)':'var(--down)'}"/>`+
+       `<text x="${i*bw+bw/2}" y="138" text-anchor="middle" font-size="11" fill="var(--muted)">${x.period.slice(2,7)}</text>`+
+       `<text x="${x0+bw*.52}" y="${115-hn}" text-anchor="middle" font-size="10" fill="var(--muted)" font-family="IBM Plex Mono">${x.net_income!=null?(x.net_income/1e6).toFixed(0):''}</text>`});
+  return `<svg class="chart" viewBox="0 0 ${W} ${H-20}">${g}</svg><p class="small muted" style="margin:4px 0 0">Grey: revenue. Colour: net profit (RM million, red = loss).</p>`}
+function showResearch(t){const r=((D&&D.stocks)||[]).find(x=>x.ticker===t)||{ticker:t,code:t.replace('.KL',''),name:t};const f=(F.stocks||{})[t]||{};const sc=f.score||{};const note=RS[t];
+  const sig=(D&&D.signals||[]).find(s=>s.ticker===t);const news=(D&&D.stock_news||{})[t];
+  const m=(lab,val)=>`<div>${lab}<b>${val}</b></div>`;
+  $('#rsList').style.display='none';const el=$('#rsDetail');el.style.display='';
+  el.innerHTML=`<button class="back" onclick="backToList()">← All stocks</button>
+   <div class="card"><div class="row" style="gap:12px;align-items:flex-start">${gradeBox(sc.grade,44)}<div style="flex:1;min-width:0"><h2 style="margin:0">${esc(f.long_name||r.name)}</h2>
+     <div class="small muted">${esc(r.code)} · ${esc(r.sector||f.sector||'')}${f.industry?' · '+esc(f.industry):''}${f.market_cap?' · '+bigRM(f.market_cap):''}</div></div></div>
+     ${r.close?`<div class="mini"><div>Price<b>${px(r.close)}</b></div><div>Today<b class="${cls(r.r1)}">${pct(r.r1)}</b></div><div>20 days<b class="${cls(r.r20)}">${pct(r.r20)}</b></div><div>From 52w high<b>${pct(r.pct_from_high)}</b></div></div>${lineSVG(r.closes,140)}`:''}
+     ${r.volume?`<p class="small" style="margin:6px 0 0">Volume ${r.volume.ratio}x average · up/down volume ${r.volume.updown_20d} · OBV ${r.volume.obv_trend} · <b class="${r.volume.label==='Accumulation'?'pos':r.volume.label==='Distribution'?'neg':''}">${r.volume.label}</b> · RSI ${r.rsi}</p>`:''}
+     ${r.flow?flowHTML(r.flow):''}
+     ${sig?`<div class="banner ok" style="margin:10px 0 0">Active setup: <b>${esc(sig.pattern_label)}</b> · grade ${sig.grade} · buy-stop ${px(sig.trigger)}, stop ${px(sig.stop)}, target ${px(sig.target)}</div>`:''}</div>
+   <div class="card"><h3>AI research note</h3>${note?`<div class="small muted">${esc(note.date)} · ${note.web_search?'with web search':'from data only'} · ${esc(note.model||'')}</div><div class="md" style="margin-top:8px">${md(note.markdown)}</div><p class="small muted">AI notes can be wrong. Check key facts against the company's Bursa announcements.</p>`:
+     `<p class="small">${D&&D.ai_enabled?'No note yet. Notes are written automatically for alerted stocks and holdings.':'AI notes are off. Add an <span class="mono">ANTHROPIC_API_KEY</span> secret in GitHub to turn them on (see README).'}</p><p class="small muted">To request one now: GitHub → Actions → Daily scan → Run workflow → type <b class="mono">${esc(r.code)}</b> in "Research a stock". The note arrives in about 3 minutes.</p>`}</div>
+   <div class="card"><h3>Fundamentals ${sc.score!=null?`<span class="chip">${sc.score}/100</span>`:''}</h3>
+     ${f.fetched?`<div class="mini">${m('P/E',f.pe?f.pe.toFixed(1):'–')}${m('Sector P/E',f.sector_pe??'–')}${m('P/B',f.pb?f.pb.toFixed(2):'–')}${m('Div. yield',f.dividend_yield!=null?f.dividend_yield+'%':'–')}
+       ${m('ROE',f.roe!=null?f.roe+'%':'–')}${m('Net margin',f.net_margin!=null?f.net_margin+'%':'–')}${m('Revenue 12m',pct(f.rev_yoy_ttm,0))}${m('Profit 12m',pct(f.ni_yoy_ttm,0))}
+       ${m('Debt/equity',f.debt_to_equity??'–')}${m('Payout',f.payout_ratio!=null?f.payout_ratio+'%':'–')}${m('Analyst target',f.target_mean?px(f.target_mean):'–')}${m('Analysts',f.analysts||'–')}</div>
+       ${sc.parts?`<div style="margin-top:10px">${Object.entries(sc.parts).map(([k,[a,b]])=>`<div class="comp"><span>${k}</span><div class="bar"><i style="width:${a/b*100}%"></i></div><span class="mono">${Math.round(a)}/${b}</span></div>`).join('')}</div>`:''}
+       ${sc.strengths&&sc.strengths.length?`<p class="small" style="margin:10px 0 2px"><b class="pos">Strengths</b></p><ul class="reasons" style="margin:0">${sc.strengths.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>`:''}
+       ${sc.concerns&&sc.concerns.length?`<p class="small" style="margin:10px 0 2px"><b class="neg">Concerns</b></p><ul class="reasons" style="margin:0">${sc.concerns.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>`:''}
+       ${f.earnings_date?`<p class="small muted" style="margin-top:8px">Next results (estimate): ${esc(f.earnings_date)}</p>`:''}
+       <p class="small muted" style="margin:6px 0 0">Source: Yahoo Finance, updated ${esc(f.fetched)}. ${sc.score==null?'Not enough data to grade this stock.':''}</p>`
+     :'<p class="small muted">No fundamental data yet. It is fetched over the first few scans.</p>'}</div>
+   <div class="card"><h3>Revenue and profit by quarter</h3>${qBars(f.quarterly)}</div>
+   ${f.summary?`<div class="card"><h3>What the company does</h3><p class="small">${esc(f.summary)}${f.summary.length>=700?'…':''}</p></div>`:''}
+   ${(D.insider_news||{})[t]&&(D.insider_news||{})[t].length?`<div class="card news"><h3>Insider and institutional activity</h3>${newsList(D.insider_news[t],6)}</div>`:''}
+   <div class="card news"><h3>News</h3>${news?newsList(news,8):'<p class="small muted">Stock news is collected for signal stocks, holdings and on-demand research.</p>'}
+     <p class="small"><a target="_blank" rel="noopener" href="https://www.bursamalaysia.com/market_information/announcements/company_announcement?keyword=${encodeURIComponent(r.code)}">Bursa announcements for ${esc(r.code)} →</a></p></div>`;
+  window.scrollTo(0,0)}
+
+/* ---------- themes tab ---------- */
+const stCls={'Hot':'down','Heating up':'warn','Neutral':'','Cooling':'','Cold':''};
+const stIcon={'Hot':'🔥','Heating up':'↗','Neutral':'·','Cooling':'↘','Cold':'❄'};
+function thRow(n,depth){const s=n.stats;if(!s)return '';
+  return `<div class="row" style="justify-content:space-between;gap:8px"><div style="min-width:0;flex:1"><b style="font-size:${depth===0?16:depth===1?15:14}px">${stIcon[n.status]||''} ${esc(n.name)}</b>
+   ${n.status?`<span class="chip ${stCls[n.status]}">${n.status}</span>`:''}${n.why?`<div class="small muted">${esc(n.why)}</div>`:''}</div>
+   <div class="mono small" style="text-align:right;flex:none"><b>${n.score??'–'}</b><div class="${cls(s.r20)}">${pct(s.r20)} 20d</div></div></div>
+   <div class="bar" style="margin:6px 0 4px"><i style="width:${n.score||0}%;background:${n.status==='Hot'?'var(--down)':n.status==='Heating up'?'var(--warn)':'var(--accent)'}"></i></div>
+   <div class="small muted mono">vs KLCI ${pct(s.rs20)} · volume ${s.volx}x · ${s.breadth}% above 20EMA · money flow ${s.cmf20>0?'+':''}${s.cmf20}</div>`}
+function renderThemes(){const T=D&&D.themes;if(!T){$('#thTree').innerHTML='<div class="card empty">Theme data appears after the next scan.</div>';return}
+  const mb=D.market_brief;
+  $('#thBrief').innerHTML=mb?`<div class="card"><div class="small muted">AI market brief · ${esc(mb.date)} · from web research</div><h3 style="margin:6px 0">${esc(mb.headline)}</h3>
+    ${(mb.hot_themes||[]).length?`<p class="small" style="margin:8px 0 2px"><b>Hot themes</b></p><ul class="reasons" style="margin:0">${mb.hot_themes.map(h=>`<li><b>${esc(h.path)}</b>: ${esc(h.why)}${h.stocks?` <span class="muted">(${esc(h.stocks.join(', '))})</span>`:''}${h.money?` · <i>${esc(h.money)}</i>`:''}</li>`).join('')}</ul>`:''}
+    ${(mb.cooling_themes||[]).length?`<p class="small" style="margin:8px 0 2px"><b>Cooling</b></p><ul class="reasons" style="margin:0">${mb.cooling_themes.map(h=>`<li><b>${esc(h.path)}</b>: ${esc(h.why)}</li>`).join('')}</ul>`:''}
+    ${mb.fund_flow?`<p class="small" style="margin:8px 0 0"><b>Fund flow:</b> ${esc(mb.fund_flow)}</p>`:''}
+    ${(mb.insider_moves||[]).length?`<p class="small" style="margin:8px 0 2px"><b>Insider and institutional moves</b></p><ul class="reasons" style="margin:0">${mb.insider_moves.map(h=>`<li><b>${esc(h.stock)}</b>: ${esc(h.what)}${h.read?` · <i>${esc(h.read)}</i>`:''}</li>`).join('')}</ul>`:''}
+    ${(mb.catalysts||[]).length?`<p class="small" style="margin:8px 0 2px"><b>Coming up</b></p><ul class="reasons" style="margin:0">${mb.catalysts.map(h=>`<li>${esc(h.date)}: ${esc(h.event)}</li>`).join('')}</ul>`:''}
+    ${(mb.sources||[]).length?`<details><summary>Sources</summary><ul class="small">${mb.sources.map(x=>`<li><a href="${esc(x.url)}" target="_blank" rel="noopener">${esc(x.title)}</a></li>`).join('')}</ul></details>`:''}</div>`:'';
+  const top=T.ranking.filter(x=>x.status==='Hot'||x.status==='Heating up').slice(0,5);
+  $('#thTop').innerHTML=`<div class="card"><h3>Where the money is going</h3><p class="small muted">Sub-themes ranked by price strength vs the KLCI, volume expansion, breadth and money flow (CMF). KLCI 20-day: ${pct(T.index_r20)}.</p>
+    ${top.length?top.map(x=>`<div class="li"><span>${stIcon[x.status]} ${esc(x.name.split(' > ').slice(1).join(' › '))}<div class="small muted">leaders ${esc(x.leaders.join(', '))}</div></span><span class="mono"><b>${x.score}</b> <span class="${cls(x.r20)}">${pct(x.r20)}</span></span></div>`).join(''):'<p class="small muted">No theme is hot right now: money is not concentrated anywhere.</p>'}</div>`;
+  $('#thTree').innerHTML=T.tree.map(sec=>`<div class="card">${thRow(sec,0)}
+    ${sec.themes.map(t=>`<details style="margin-top:10px"><summary style="list-style:none;color:var(--ink)">${thRow(t,1)}</summary>
+      <div style="padding-left:10px;border-left:2px solid var(--line);margin-top:8px">${t.subthemes.map(sb=>`<div style="margin:10px 0">${thRow(sb,2)}
+        ${sb.stats?`<div style="margin-top:6px">${sb.stats.stocks.map(x=>`<div class="li" style="cursor:pointer" onclick="openResearch('${esc(x.ticker)}')"><span>${esc(x.name)} <span class="mono small muted">${x.code}</span>${x.flow&&x.flow!=='Neutral'?` <span class="chip ${x.flow.includes('In')?'up':'down'}">${x.flow}</span>`:''}</span><span class="mono small">${pct(x.r20)} · ${x.volx}x</span></div>`).join('')}</div>`:''}</div>`).join('')}</div></details>`).join('')}</div>`).join('');}
+
+/* ---------- playbook tab ---------- */
+let pbKey=store.get('pb','contra');
+$('#pbSeg').onclick=e=>{const b=e.target.closest('button');if(!b)return;pbKey=b.dataset.k;store.set('pb',pbKey);renderPlaybook()};
+function accumMeter(f){if(!f||f.accum_score==null)return'';
+  const s=f.accum_score,cl=s>=58?'pos':s<=42?'neg':'';
+  const why=s>=58?'Buyers are in control: money is flowing into this stock.':s<=42?'Sellers are in control: money is leaving this stock.':'No clear bias: buying and selling are roughly even.';
+  return `<div class="accum-head"><b>Accumulation</b><span class="mono"><b class="${cl}">${s}</b> / 100 · ${esc(f.accum_label)}${f.hot_money?' · <b class="neg">🔥 hot money</b>':''}</span></div>
+  <div class="meter" title="0 = heavy selling, 50 = neutral, 100 = heavy buying"><i style="left:${s}%"></i></div>
+  <div class="small muted" style="display:flex;justify-content:space-between"><span>Selling</span><span>Neutral</span><span>Buying</span></div>
+  <p class="small muted" style="margin:4px 0 0">${why} Score uses CMF (20d), accumulation vs distribution days (25d), turnover vs its 50-day average, and 5-day price move.</p>`}
+function flowHTML(f){if(!f)return'';return accumMeter(f)+`<div class="mini"><div>Money flow<b class="${f.label.includes('In')?'pos':f.label.includes('Out')?'neg':''}">${f.label}</b></div><div>CMF 20d<b>${f.cmf20}</b></div><div>MFI 14<b>${f.mfi14}</b></div><div>Accum / dist days<b>${f.acc_days_25} / ${f.dist_days_25}</b></div></div>
+  <p class="small muted" style="margin:4px 0 0">Turnover ${f.turnover_surge}x its 50-day average${f.daily_turnover_pct_mcap!=null?` · ${f.daily_turnover_pct_mcap}% of market cap trades daily`:''}${f.hot_money?' · <b class="neg">hot-money activity</b>':''}${f.note?' · '+esc(f.note):''}</p>`}
+function btHTML(b,note){if(!b||!b.n)return '<p class="small muted">Not enough trades in the test yet.</p>';
+  return `<div class="stats"><div class="stat"><span>Trades</span><b>${b.n}</b></div><div class="stat"><span>Win rate</span><b>${b.win}%</b></div>
+   <div class="stat"><span>${b.avg_ret!=null?'Avg per trade':'Avg R'}</span><b class="${cls(b.avg_ret??b.avg_r)}">${b.avg_ret!=null?pct(b.avg_ret,2):(b.avg_r>0?'+':'')+b.avg_r+'R'}</b></div><div class="stat"><span>Profit factor</span><b>${b.pf??'–'}</b></div></div>
+   <dl class="kv" style="margin-top:10px">${b.avg_win!=null?`<dt>Average win / loss</dt><dd>${pct(b.avg_win)} / ${pct(b.avg_loss)}</dd>`:''}${b.avg_win_r!=null?`<dt>Average win / loss</dt><dd>${b.avg_win_r}R / ${b.avg_loss_r}R</dd>`:''}
+   ${b.median_ret!=null?`<dt>Median trade</dt><dd>${pct(b.median_ret)}</dd>`:''}${b.best!=null?`<dt>Best / worst</dt><dd>${pct(b.best)} / ${pct(b.worst)}</dd>`:''}
+   ${b.avg_r!=null&&b.avg_ret!=null?`<dt>Avg in R</dt><dd>${b.avg_r}R</dd>`:''}<dt>Average hold</dt><dd>${b.avg_hold} days</dd><dt>Worst losing streak</dt><dd>${b.max_losing_streak} trades</dd></dl>
+   ${b.curve?`<p class="small muted" style="margin:8px 0 0">Cumulative ${b.avg_ret!=null?'% per trade':'R'}, in date order</p>${curveSVG(b.curve)}`:''}${note?`<p class="small muted">${esc(note)}</p>`:''}`}
+function pickHTML(p,key,i){const pos=p.position||{};const f=p.fundamentals||{};
+  return `<div class="card"><div class="sig-h"><div class="grade gN" style="width:34px;height:34px">${i+1}</div><div class="t"><div class="name">${esc(p.name)} <span class="muted mono small">${esc(p.code)}</span></div>
+   <div class="row small">${(p.themes||[]).slice(0,1).map(t=>`<span class="chip ${stCls[t.status]||''}">${stIcon[t.status]||''} ${esc(t.path.split(' > ').slice(1).join(' › '))}</span>`).join('')}${p.strategy?`<span class="chip">${esc(p.strategy)}</span>`:''}${p.triggered?'<span class="chip up">Triggered today</span>':''}${f.grade?`<span class="chip">Fundamentals ${f.grade}</span>`:''}</div></div>
+   <div class="mono small muted" style="text-align:right">score<br><b style="color:var(--ink);font-size:16px">${p.score}</b></div></div>
+   ${p.candles?candleSVG(p.candles,{trigger:p.entry,stop:p.stop,target:p.target||p.entry,date:''}):''}
+   <div class="plan"><div class="e"><span>Entry</span><b>${px(p.entry)}</b></div><div class="s"><span>Stop</span><b>${px(p.stop)}</b></div><div class="g"><span>Target</span><b>${p.target?px(p.target):'trail'}</b></div></div>
+   <dl class="kv"><dt>How to enter</dt><dd style="text-align:right;font-family:inherit;font-size:13px">${esc(p.entry_note)}</dd>
+    <dt>Exit plan</dt><dd style="text-align:right;font-family:inherit;font-size:13px">${esc(p.exit)}${p.stop_note?'. '+esc(p.stop_note):''}</dd>
+    <dt>Holding period</dt><dd>${esc(p.hold)}</dd>
+    <dt>Position</dt><dd>${pos.lots?`${pos.lots} lots · ${rm(pos.cost_rm)}`:'under 1 lot'}${pos.risk_rm?` · risk ${rm(pos.risk_rm)}`:''}</dd>
+    ${p.backtest?`<dt>This setup's backtest</dt><dd>${p.backtest.n} trades · ${p.backtest.win}% · ${p.backtest.avg_r>0?'+':''}${p.backtest.avg_r}R</dd>`:''}
+    ${p.history?`<dt>3-year record</dt><dd>${pct(p.history.cagr_pct)}/yr · worst fall ${pct(p.history.max_drawdown_pct,0)}</dd>`:''}</dl>
+   ${p.moat?`<p class="small" style="margin:8px 0 0"><b>Moat:</b> ${esc(p.moat)}</p>`:''}${p.cycle?`<p class="small" style="margin:4px 0 0"><b>Cycle:</b> ${esc(p.cycle)}</p>`:''}
+   <ul class="reasons">${(p.reasons||[]).map(r=>`<li>${esc(r)}</li>`).join('')}</ul>
+   ${flowHTML(p.flow)}
+   ${f.concerns&&f.concerns.length?`<ul class="warnlist">${f.concerns.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>`:''}
+   ${p.ai_verdict?`<div class="ai small"><span class="muted">AI research · ${esc(p.ai_date)}</span><div class="v">${esc(p.ai_verdict)}</div></div>`:''}
+   ${p.insider&&p.insider.length?`<details class="news" open><summary>Insider and institutional activity (${p.insider.length})</summary>${newsList(p.insider,5)}</details>`:''}
+   ${p.news&&p.news.length?`<details class="news"><summary>News (${p.news.length})</summary>${newsList(p.news,4)}</details>`:''}
+   ${p.warrants&&p.warrants.length?`<details open><summary>Your call warrants on ${esc(p.name)}</summary>${p.warrants.map(warrantHTML).join('')}</details>`:''}
+   <div style="margin-top:10px"><button class="btn ghost" onclick="openResearch('${esc(p.ticker)}')">Company research →</button></div></div>`}
+function renderPlaybook(){const P=D&&D.playbook;if(!P){$('#pbBody').innerHTML='<div class="card empty">Playbooks appear after the next scan.</div>';return}
+  $$('#pbSeg button').forEach(x=>x.classList.toggle('on',x.dataset.k===pbKey));
+  const pb=P.find(x=>x.key===pbKey)||P[0];const wg=pb.warrant_guide;
+  $('#pbBody').innerHTML=`<div class="card"><h3>${esc(pb.title)}</h3><p class="small">${esc(pb.desc)}</p><ol class="small" style="padding-left:18px;margin:6px 0 0">${pb.rules.map(r=>`<li>${esc(r)}</li>`).join('')}</ol></div>
+   <div class="card"><h3>Backtest: 3 years, all scanned stocks</h3>${btHTML(pb.backtest,pb.backtest_note)}</div>
+   <h2 style="margin-top:16px">Top 3 today</h2>${pb.picks.length?pb.picks.map((p,i)=>pickHTML(p,pb.key,i)).join(''):'<div class="card empty">No stock qualifies today. Waiting is part of the plan.</div>'}
+   ${pb.watch&&pb.watch.length?`<div class="card"><h3>Next on the list</h3>${pb.watch.map(w=>`<div class="li" style="cursor:pointer" onclick="openResearch('${esc(w.ticker)}')"><span>${esc(w.name)} <span class="mono small muted">${w.code}</span></span><span class="mono">${w.score}</span></div>`).join('')}</div>`:''}
+   <div class="card"><h3>Call warrants for this horizon: ${esc(wg.use)}</h3><ul class="reasons" style="margin:0">${wg.rules.map(r=>`<li>${esc(r)}</li>`).join('')}</ul>
+    <p class="small muted" style="margin:8px 0 0">Add warrants you're watching to <span class="mono">warrants</span> in config.json and their plan appears on each pick. The Calculator tab checks any warrant by hand.</p></div>`}
+
+/* ---------- lookup: any stock or warrant ---------- */
+let LK={items:{},errors:{}};
+const hzCls=s=>s>=70?'pos':s<40?'neg':'';
+const compNames={tech:'Technical',flow:'Money flow',fund:'Fundamentals',moat:'Moat',bt:'Own backtest',news:'News and insiders',regime:'Market'};
+function lkPlan(p){
+  if(!p||p.invalid)return p&&p.invalid?`<p class="small neg" style="margin:6px 0">${esc(p.invalid)}</p>`:'';
+  const pos=p.position&&p.position.lots!=null?`${p.position.lots} lot${p.position.lots===1?'':'s'} (${p.position.shares} shares)${p.position.risk_rm!=null?' · risk '+rm(p.position.risk_rm):''}`:'–';
+  return `<div class="mini"><div>Entry<b>${px(p.entry)}</b></div><div>Stop<b>${px(p.stop)}</b></div><div>Target<b>${p.target!=null?px(p.target):'none'}</b></div><div>Reward<b>${p.reward_pct!=null?'+'+p.reward_pct+'%':'–'}</b></div>
+    <div>Stop distance<b>${p.risk_pct_move!=null?p.risk_pct_move+'%':'–'}</b></div><div>Hold<b>${esc(p.hold||'')}</b></div><div style="grid-column:span 2">Size<b style="font-size:12px">${esc(pos)}</b></div></div>
+    <p class="small muted" style="margin:6px 0 0">${esc(p.entry_note||'')}${p.exit?' Exit: '+esc(p.exit)+'.':''}</p>`}
+function lkBacktest(h){const b=h.backtest||{};const key=h.backtest_key==='avg_r'?'R':'%';
+  if(!b.n)return '<p class="small muted">No past trades for this stock under this rule.</p>';
+  const avg=b.avg_ret!=null?b.avg_ret:b.avg_r;
+  return `<p class="small muted">Own backtest on this stock: ${b.n} trades · win ${b.win??'–'}% · average ${avg??'–'}${key} per trade${b.pf!=null?' · profit factor '+b.pf:''}${b.max_losing_streak!=null?' · worst losing run '+b.max_losing_streak:''}${b.n<8?'. Too few trades to judge: treat as neutral.':''}</p>`}
+function lkHorizon(k,h){
+  if(!h)return '';
+  const comps=Object.entries(h.components||{}).filter(([c])=>(h.weights||{})[c]>0).map(([c,v])=>`${compNames[c]} ${v}`).join(' · ');
+  return `<div class="card"><div class="accum-head"><h3 style="margin:0">${esc(h.name)}</h3><span class="mono"><b class="${hzCls(h.score)}">${h.score}</b> / 100</span></div>
+    <div class="meter"><i style="left:${h.score}%"></i></div>
+    <p class="small" style="margin:6px 0 2px"><b>${esc(h.verdict)}</b> · ${h.triggered?'<span class="pos">triggered</span>':'not triggered'}</p>
+    <p class="small" style="margin:0 0 4px">${esc(h.action)}</p>
+    ${lkPlan(h.plan)}
+    <details style="margin-top:8px"><summary>Rules, reasons and score parts</summary>
+      <ul class="reasons">${(h.conditions||[]).map(c=>`<li>${c.met?'✓':'✗'} ${esc(c.name)}</li>`).join('')}</ul>
+      <ul class="reasons">${(h.why||[]).map(w=>`<li>${esc(w)}</li>`).join('')}</ul>
+      <p class="small muted">Score parts (0-100): ${esc(comps)}</p>${lkBacktest(h)}
+    </details></div>`}
+function lookupCard(it){
+  const H=it.horizons||{}, best=H[it.best]||{}, f=it.fundamentals||null, t=it.technical||{}, c=it.change||{};
+  const warr=(it.type==='warrant'&&it.requested_warrant?[it.requested_warrant]:[]).concat((it.warrants||[]).filter(w=>!(it.requested_warrant&&w.code===it.requested_warrant.code)));
+  const warrHTML=warr.length?`<div class="card"><h3>Call warrants</h3><p class="small muted">Plan at the ${esc(best.name||'')} levels. Premium, gearing and days left come from the warrant's terms.</p>
+    ${warr.map(w=>`<div class="li" style="display:block"><div style="display:flex;justify-content:space-between;gap:8px"><span><b>${esc(w.code)}</b> <span class="small muted">${esc(w.moneyness)} · ${w.days_left} days left</span></span><span class="mono">${px(w.price)}</span></div>
+      <div class="mini"><div>Effective gearing<b>${w.effective_gearing}x</b></div><div>Delta<b>${w.delta}</b></div><div>Premium<b>${w.premium_pct}%</b></div><div>Breakeven<b>${px(w.breakeven)}</b></div>
+        ${w.at_stock_stop!=null?`<div>Warrant at stop<b>${px(w.at_stock_stop)}</b></div>`:''}${w.at_stock_target!=null?`<div>Warrant at target<b>${px(w.at_stock_target)}</b></div>`:''}<div>Price source<b style="font-size:12px">${esc(w.price_source)}</b></div></div>
+      ${(w.warnings||[]).map(x=>`<p class="small neg" style="margin:4px 0 0">${esc(x)}</p>`).join('')}
+      <p class="small muted" style="margin:4px 0 0">Expiry ${esc(w.expiry)} · exercise ${px(w.exercise)} · ratio ${w.ratio}:1</p></div>`).join('')}
+    <p class="small muted" style="margin:8px 0 0">Price is theoretical unless the warrant has a live quote; check the bid and ask in your broker before trading.</p></div>`:'';
+  return `<div class="card"><div class="row" style="justify-content:space-between;align-items:flex-start;gap:8px"><div><h3 style="margin:0">${esc(it.name)}</h3><div class="small muted mono">${esc(it.code)} · close ${px(it.price)} · ${esc(it.date)}</div></div><span class="mono small muted">${esc(it.generated_at||'')}</span></div>
+    <p style="margin:10px 0 0"><b>Best fit: ${esc(best.name||'')}</b> · score <b class="${hzCls(best.score)}">${best.score}</b> / 100 · ${esc(best.verdict||'')}</p>
+    <p class="small" style="margin:4px 0 0">${esc(best.action||'')}</p>
+    ${(it.notes||[]).map(n=>`<p class="small" style="margin:6px 0 0;color:var(--warn)">${esc(n)}</p>`).join('')}</div>
+    ${order4.map(k=>lkHorizon(k,H[k])).join('')}
+    <div class="card"><h3>Price and technicals</h3><div class="mini"><div>1 day<b class="${cls(c['1d'])}">${pct(c['1d'])}</b></div><div>5 days<b class="${cls(c['5d'])}">${pct(c['5d'])}</b></div><div>20 days<b class="${cls(c['20d'])}">${pct(c['20d'])}</b></div><div>60 days<b class="${cls(c['60d'])}">${pct(c['60d'])}</b></div></div>
+      <div class="mini"><div>Trend<b style="font-size:12px">${esc(t.trend||'–')}</b></div><div>RSI<b>${t.rsi??'–'}</b></div><div>Volume<b>${t.volume_ratio??'–'}x</b></div><div>vs 52w high<b>${t.vs_52w_high_pct!=null?t.vs_52w_high_pct+'%':'–'}</b></div>
+      <div>EMA 20<b>${px(t.ema20)}</b></div><div>EMA 50<b>${px(t.ema50)}</b></div><div>EMA 200<b>${px(t.ema200)}</b></div><div>Traded RM/day<b>${t.value20_rm_m!=null?t.value20_rm_m+'m':'–'}</b></div></div></div>
+    <div class="card"><h3>Money flow and accumulation</h3>${flowHTML(it.flow)}</div>
+    ${warrHTML}
+    <div class="card"><h3>Fundamentals</h3>${f?`<div class="mini"><div>Grade<b>${esc(f.grade||'–')}</b></div><div>Score<b>${f.score??'–'}</b></div><div>P/E<b>${f.pe!=null?f.pe:'–'}</b></div><div>ROE<b>${f.roe!=null?(f.roe*100).toFixed(1)+'%':'–'}</b></div>
+      <div>Profit growth<b>${f.ni_yoy_ttm!=null?pct(f.ni_yoy_ttm*100):'–'}</b></div><div>Dividend yield<b>${f.dividend_yield!=null?(f.dividend_yield*100).toFixed(1)+'%':'–'}</b></div><div>Debt/equity<b>${f.debt_to_equity??'–'}</b></div><div>Results due<b style="font-size:12px">${esc(f.earnings_date||'–')}</b></div></div>
+      ${(f.strengths||[]).length?`<p class="small" style="margin:6px 0 0"><b>Strengths:</b> ${f.strengths.map(esc).join('; ')}</p>`:''}
+      ${(f.concerns||[]).length?`<p class="small" style="margin:4px 0 0"><b>Concerns:</b> ${f.concerns.map(esc).join('; ')}</p>`:''}`:'<p class="small muted">No fundamentals on file yet for this company.</p>'}
+      ${it.moat?`<p class="small" style="margin:6px 0 0"><b>Moat:</b> ${esc(it.moat)}</p>`:''}</div>
+    <div class="card"><h3>Themes it belongs to</h3>${(it.themes||[]).length?it.themes.map(x=>`<div class="li"><span>${esc(x.path||'')}</span><span class="small muted">${esc(x.status||'')}</span></div>`).join(''):'<p class="small muted">Not in a tracked theme right now.</p>'}</div>
+    <div class="card news"><h3>News</h3>${(it.news||[]).length?newsList(it.news,6):'<p class="small muted">No recent headlines.</p>'}</div>
+    <div class="card news"><h3>Insider and corporate moves</h3>${(it.insider||[]).length?newsList(it.insider,4):'<p class="small muted">No recent insider or corporate-action headlines.</p>'}</div>
+    <p class="small muted">Scores are a rules-based read of the data, not a promise. Check the company's Bursa announcements before you trade. Educational tool, not financial advice.</p>`}
+const order4=['contra','short','mid','long'];
+function lkChips(){const codes=Object.keys(LK.items||{});$('#lkChips').innerHTML=codes.length?codes.map(c=>`<button data-c="${esc(c)}">${esc(c)}</button>`).join(''):'<span class="small muted">Nothing analysed yet.</span>'}
+function lkRender(q){
+  const out=$('#lkOut');
+  const code=(q||'').trim().toUpperCase().replace(/\.KL$/,'');
+  if(!code){out.innerHTML='';return}
+  const it=(LK.items||{})[code];
+  if(it){out.innerHTML=lookupCard(it);return}
+  const err=(LK.errors||{})[code];
+  out.innerHTML=`<div class="card"><h3>${esc(code)}: not analysed yet</h3>
+    <p class="small">${err?esc(err):'Run an analysis: GitHub, then Actions, then Daily scan, then Run workflow. Type this code in "Research a stock". It takes a few minutes, and the result appears here after the run.'}</p>
+    <p class="small muted">Stock codes are four digits (e.g. 1155). A warrant must be in config.json first (mother, exercise, ratio, expiry).</p></div>`;
+}
+$('#lkQ').oninput=e=>lkRender(e.target.value);
+$('#lkChips').onclick=e=>{const b=e.target.closest('button');if(!b)return;$('#lkQ').value=b.dataset.c;lkRender(b.dataset.c)};
+
+/* ---------- boot ---------- */
+const DEMO=/*DEMO*/null;
+async function load(){
+  const get=async u=>{try{const r=await fetch(u+'?'+Date.now(),{cache:'no-store'});return r.ok?await r.json():null}catch(e){return null}};
+  const [sig,fu,rs,lk]=await Promise.all([get('signals.json'),get('fundamentals.json'),get('research.json'),get('lookup.json')]);
+  D=sig;F=fu||{stocks:{}};RS=rs||{};
+  LK=lk||{items:{},errors:{}};lkChips();
+  if(!D){const DM=DEMO||await get('demo.json');if(DM){D=Object.assign({_demo:true},DM.signals);F=DM.fundamentals||F;RS=DM.research||RS}}
+  if(!D){$('#sigList').innerHTML='<div class="card empty">No scan data yet. Run the "Daily scan" workflow once in GitHub Actions.</div>';showCap();calcStock();calcWarrant();calcFF();renderJ();return}
+  $('#stamp').textContent=`Data ${D.data_date} · ${D.scanned} stocks`;
+  showCap();renderSignals();renderMarket();renderThemes();renderPlaybook();renderRsList();renderBacktest();calcStock();calcWarrant();calcFF();renderJ()}
+load();
+</script>
+</body>
+</html>

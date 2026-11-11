@@ -1,0 +1,796 @@
+{
+  "account": {
+    "capital": 20000,
+    "risk_pct": 1.0,
+    "max_position_pct": 25
+  },
+  "strategy": {
+    "reward_r": 2.0,
+    "max_hold_days": 15,
+    "entry_window_days": 2,
+    "stop_buffer_atr": 0.2,
+    "max_stop_pct": 12,
+    "cost_pct_round_trip": 0.25,
+    "min_price": 0.2,
+    "min_avg_value_rm": 1000000,
+    "history_period": "3y"
+  },
+  "alerts": {
+    "min_trades_for_edge": 30,
+    "min_expectancy_r": 0.1,
+    "min_score": 60,
+    "send_daily_summary": true,
+    "min_fundamental_score": 0
+  },
+  "universe": {
+    "1155.KL": "Maybank",
+    "1295.KL": "Public Bank",
+    "1023.KL": "CIMB",
+    "5819.KL": "Hong Leong Bank",
+    "1082.KL": "Hong Leong Financial",
+    "1066.KL": "RHB Bank",
+    "1015.KL": "AMMB",
+    "2488.KL": "Alliance Bank",
+    "5258.KL": "Bank Islam",
+    "1171.KL": "MBSB",
+    "1818.KL": "Bursa Malaysia",
+    "5347.KL": "Tenaga Nasional",
+    "6742.KL": "YTL Power",
+    "4677.KL": "YTL Corp",
+    "5209.KL": "Gas Malaysia",
+    "6033.KL": "Petronas Gas",
+    "5183.KL": "Petronas Chemicals",
+    "5681.KL": "Petronas Dagangan",
+    "3816.KL": "MISC",
+    "7277.KL": "Dialog",
+    "7293.KL": "Yinson",
+    "5243.KL": "Velesto",
+    "5210.KL": "Bumi Armada",
+    "5141.KL": "Dayang",
+    "5225.KL": "IHH Healthcare",
+    "5878.KL": "KPJ Healthcare",
+    "6888.KL": "Axiata",
+    "6947.KL": "CelcomDigi",
+    "6012.KL": "Maxis",
+    "4863.KL": "Telekom Malaysia",
+    "5031.KL": "TIME dotCom",
+    "0138.KL": "Zetrix AI (ex-MyEG)",
+    "4707.KL": "Nestle Malaysia",
+    "4065.KL": "PPB Group",
+    "7084.KL": "QL Resources",
+    "5296.KL": "MR DIY",
+    "5326.KL": "99 Speed Mart",
+    "3255.KL": "Heineken Malaysia",
+    "2836.KL": "Carlsberg Malaysia",
+    "6599.KL": "AEON Co",
+    "5139.KL": "AEON Credit",
+    "7052.KL": "Padini",
+    "2445.KL": "KLK",
+    "1961.KL": "IOI Corp",
+    "5285.KL": "SD Guthrie",
+    "4197.KL": "Sime Darby",
+    "3182.KL": "Genting",
+    "4715.KL": "Genting Malaysia",
+    "8869.KL": "Press Metal",
+    "5398.KL": "Gamuda",
+    "3336.KL": "IJM",
+    "5263.KL": "Sunway Construction",
+    "9679.KL": "WCT",
+    "5211.KL": "Sunway",
+    "5249.KL": "IOI Properties",
+    "5288.KL": "Sime Darby Property",
+    "8583.KL": "Mah Sing",
+    "5148.KL": "UEM Sunrise",
+    "5236.KL": "Matrix Concepts",
+    "3794.KL": "Malayan Cement",
+    "5246.KL": "Westports",
+    "5099.KL": "Capital A",
+    "0166.KL": "Inari Amertron",
+    "0097.KL": "ViTrox",
+    "0128.KL": "Frontken",
+    "5292.KL": "UWC",
+    "7160.KL": "Pentamaster",
+    "0208.KL": "Greatech",
+    "3867.KL": "MPI",
+    "5005.KL": "Unisem",
+    "7204.KL": "D&O Green Tech",
+    "7113.KL": "Top Glove",
+    "5168.KL": "Hartalega",
+    "7153.KL": "Kossan",
+    "0151.KL": "Kelington",
+    "5161.KL": "JCY International",
+    "0083.KL": "Notion VTec",
+    "0270.KL": "Nationgate",
+    "6963.KL": "VS Industry",
+    "0104.KL": "Genetec",
+    "9822.KL": "SAM Engineering",
+    "5301.KL": "CTOS Digital",
+    "5309.KL": "ITMAX System",
+    "0225.KL": "Southern Cable",
+    "0233.KL": "Pekat Group",
+    "0215.KL": "Solarvest",
+    "0223.KL": "Samaiden",
+    "7161.KL": "Kerjaya Prospek",
+    "1651.KL": "MRCB",
+    "8206.KL": "Eco World",
+    "5272.KL": "Ranhill Utilities",
+    "3069.KL": "Mega First",
+    "5199.KL": "Hibiscus Petroleum",
+    "8524.KL": "Taliworks",
+    "2089.KL": "United Plantations",
+    "5138.KL": "Hap Seng Plantations",
+    "9466.KL": "KKB Engineering",
+    "5321.KL": "Keyfield International"
+  },
+  "index": "^KLSE",
+  "holdings": [],
+  "warrants": [
+    {
+      "code": "DIALOG-C3D",
+      "yahoo": "72773D.KL",
+      "mother": "7277.KL",
+      "exercise": 2.38,
+      "ratio": 2,
+      "expiry": "2027-05-10"
+    },
+    {
+      "code": "SUNCON-C70",
+      "yahoo": "526370.KL",
+      "mother": "5263.KL",
+      "exercise": 8.0,
+      "ratio": 6,
+      "expiry": "2027-04-30"
+    },
+    {
+      "code": "GAMUDA-C5C",
+      "yahoo": "53985C.KL",
+      "mother": "5398.KL",
+      "exercise": 4.68,
+      "ratio": 3,
+      "expiry": "2027-04-30"
+    },
+    {
+      "code": "TENAGA-C4E",
+      "yahoo": "53474E.KL",
+      "mother": "5347.KL",
+      "exercise": 13.68,
+      "ratio": 10,
+      "expiry": "2027-09-06"
+    },
+    {
+      "code": "YTLPOWR-C2C",
+      "yahoo": "67422C.KL",
+      "mother": "6742.KL",
+      "exercise": 4.28,
+      "ratio": 3,
+      "expiry": "2027-04-30"
+    }
+  ],
+  "sectors": {
+    "1155.KL": "Financials",
+    "1295.KL": "Financials",
+    "1023.KL": "Financials",
+    "5819.KL": "Financials",
+    "1082.KL": "Financials",
+    "1066.KL": "Financials",
+    "1015.KL": "Financials",
+    "2488.KL": "Financials",
+    "5258.KL": "Financials",
+    "1171.KL": "Financials",
+    "1818.KL": "Financials",
+    "5139.KL": "Financials",
+    "5347.KL": "Utilities",
+    "6742.KL": "Utilities",
+    "4677.KL": "Utilities",
+    "5209.KL": "Utilities",
+    "6033.KL": "Utilities",
+    "5183.KL": "Energy",
+    "5681.KL": "Energy",
+    "3816.KL": "Energy",
+    "7277.KL": "Energy",
+    "7293.KL": "Energy",
+    "5243.KL": "Energy",
+    "5210.KL": "Energy",
+    "5141.KL": "Energy",
+    "5225.KL": "Healthcare",
+    "5878.KL": "Healthcare",
+    "7113.KL": "Healthcare",
+    "5168.KL": "Healthcare",
+    "7153.KL": "Healthcare",
+    "6888.KL": "Telco & Media",
+    "6947.KL": "Telco & Media",
+    "6012.KL": "Telco & Media",
+    "4863.KL": "Telco & Media",
+    "5031.KL": "Telco & Media",
+    "4707.KL": "Consumer",
+    "4065.KL": "Consumer",
+    "7084.KL": "Consumer",
+    "5296.KL": "Consumer",
+    "5326.KL": "Consumer",
+    "3255.KL": "Consumer",
+    "2836.KL": "Consumer",
+    "6599.KL": "Consumer",
+    "7052.KL": "Consumer",
+    "3182.KL": "Consumer",
+    "4715.KL": "Consumer",
+    "2445.KL": "Plantation",
+    "1961.KL": "Plantation",
+    "5285.KL": "Plantation",
+    "4197.KL": "Industrial",
+    "8869.KL": "Industrial",
+    "3794.KL": "Industrial",
+    "5246.KL": "Industrial",
+    "5099.KL": "Industrial",
+    "0138.KL": "Industrial",
+    "5398.KL": "Construction",
+    "3336.KL": "Construction",
+    "5263.KL": "Construction",
+    "9679.KL": "Construction",
+    "5211.KL": "Property",
+    "5249.KL": "Property",
+    "5288.KL": "Property",
+    "8583.KL": "Property",
+    "5148.KL": "Property",
+    "5236.KL": "Property",
+    "0166.KL": "Technology",
+    "0097.KL": "Technology",
+    "0128.KL": "Technology",
+    "5292.KL": "Technology",
+    "7160.KL": "Technology",
+    "0208.KL": "Technology",
+    "3867.KL": "Technology",
+    "5005.KL": "Technology",
+    "7204.KL": "Technology",
+    "0151.KL": "Technology",
+    "5161.KL": "Technology",
+    "0083.KL": "Technology",
+    "0270.KL": "Technology",
+    "6963.KL": "Technology",
+    "0104.KL": "Technology",
+    "9822.KL": "Industrial",
+    "5301.KL": "Technology",
+    "5309.KL": "Technology",
+    "0225.KL": "Industrial",
+    "0233.KL": "Industrial",
+    "0215.KL": "Utilities",
+    "0223.KL": "Utilities",
+    "7161.KL": "Construction",
+    "1651.KL": "Construction",
+    "8206.KL": "Property",
+    "5272.KL": "Utilities",
+    "3069.KL": "Utilities",
+    "5199.KL": "Energy",
+    "8524.KL": "Utilities",
+    "2089.KL": "Plantation",
+    "5138.KL": "Plantation",
+    "9466.KL": "Construction",
+    "5321.KL": "Energy"
+  },
+  "research": {
+    "fundamentals_max_age_days": 7,
+    "fundamentals_per_run": 30,
+    "news": true,
+    "ai": {
+      "enabled": true,
+      "model": "claude-sonnet-5-5",
+      "web_search": true,
+      "max_searches": 4,
+      "max_stocks_per_run": 5,
+      "refresh_days": 7,
+      "always": [],
+      "brief_every_days": 3,
+      "brief_searches": 8
+    }
+  },
+  "themes": [
+    {
+      "sector": "Event-driven",
+      "themes": [
+        {
+          "name": "FBM KLCI expansion to 50 stocks",
+          "why": "Price cut-off 23 Nov, announcement 3 Dec; new members join at 50% weight on 21 Dec 2026 and full weight on 21 Jun 2027",
+          "subthemes": [
+            {
+              "name": "Analysts' inclusion candidates",
+              "stocks": [
+                "5246",
+                "2089",
+                "0097",
+                "4197",
+                "7084",
+                "5878",
+                "7277",
+                "5031",
+                "5263",
+                "3336",
+                "4715",
+                "2488"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sector": "Technology",
+      "themes": [
+        {
+          "name": "AI & semiconductors",
+          "why": "Global AI server and chip demand, China+1 supply-chain shifts",
+          "subthemes": [
+            {
+              "name": "Chip packaging & testing (OSAT)",
+              "stocks": [
+                "0166",
+                "5005",
+                "3867"
+              ]
+            },
+            {
+              "name": "Test & automation equipment",
+              "stocks": [
+                "0097",
+                "7160",
+                "0208",
+                "5292",
+                "0104"
+              ]
+            },
+            {
+              "name": "Cleanroom & semicon services",
+              "stocks": [
+                "0128",
+                "0151"
+              ]
+            },
+            {
+              "name": "AI servers & electronics manufacturing",
+              "stocks": [
+                "0270",
+                "6963"
+              ]
+            },
+            {
+              "name": "Data storage (hard disk parts)",
+              "stocks": [
+                "5161",
+                "0083"
+              ]
+            },
+            {
+              "name": "Optoelectronics / auto LEDs",
+              "stocks": [
+                "7204"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Digital economy",
+          "why": "E-government, digital IDs, credit data, smart-city contracts",
+          "subthemes": [
+            {
+              "name": "Credit & data analytics",
+              "stocks": [
+                "5301"
+              ]
+            },
+            {
+              "name": "Smart city & surveillance",
+              "stocks": [
+                "5309"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sector": "Data centres & power",
+      "themes": [
+        {
+          "name": "Data-centre build-out",
+          "why": "Hyperscale data-centre packages in Johor and Klang Valley (about RM10bil awarded last quarter)",
+          "subthemes": [
+            {
+              "name": "Data-centre builders",
+              "stocks": [
+                "5398",
+                "5263",
+                "3336",
+                "7161"
+              ]
+            },
+            {
+              "name": "Data-centre land & developers",
+              "stocks": [
+                "5288",
+                "8583",
+                "5249",
+                "8206"
+              ]
+            },
+            {
+              "name": "Fibre & DC connectivity",
+              "stocks": [
+                "5031",
+                "4863"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Grid & energy transition",
+          "why": "TNB national grid investment, data-centre power demand, solar under LSS5+/CGPP",
+          "subthemes": [
+            {
+              "name": "Power utilities",
+              "stocks": [
+                "5347",
+                "6742",
+                "4677"
+              ]
+            },
+            {
+              "name": "Cables & electrical",
+              "stocks": [
+                "0225",
+                "0233"
+              ]
+            },
+            {
+              "name": "Solar EPCC",
+              "stocks": [
+                "0215",
+                "0223"
+              ]
+            },
+            {
+              "name": "Hydro & renewable IPP",
+              "stocks": [
+                "3069"
+              ]
+            },
+            {
+              "name": "Gas networks",
+              "stocks": [
+                "6033",
+                "5209"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Water",
+          "why": "Budget 2027 RM2.5bil for non-revenue water; pipe replacement",
+          "subthemes": [
+            {
+              "name": "Water utilities & piping",
+              "stocks": [
+                "5272",
+                "8524",
+                "9466"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sector": "Construction & property",
+      "themes": [
+        {
+          "name": "Mega infrastructure",
+          "why": "Budget 2027 development spending; analysts expect record contract awards",
+          "subthemes": [
+            {
+              "name": "Infrastructure contractors",
+              "stocks": [
+                "5398",
+                "3336",
+                "1651",
+                "9679",
+                "5263"
+              ]
+            },
+            {
+              "name": "Cement & building materials",
+              "stocks": [
+                "3794"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Johor–Singapore SEZ & RTS",
+          "why": "Special economic zone and the RTS Link driving Johor property and industrial land",
+          "subthemes": [
+            {
+              "name": "Johor developers & landbank",
+              "stocks": [
+                "5148",
+                "5288",
+                "8206",
+                "5249",
+                "8583"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Klang Valley property",
+          "why": "Transit-oriented and township sales",
+          "subthemes": [
+            {
+              "name": "Township developers",
+              "stocks": [
+                "5211",
+                "5236",
+                "8583"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sector": "Financials",
+      "themes": [
+        {
+          "name": "Banks",
+          "why": "Net interest margins, loan growth, dividends; foreign funds' favourite proxy",
+          "subthemes": [
+            {
+              "name": "Big banks",
+              "stocks": [
+                "1155",
+                "1295",
+                "1023",
+                "5819"
+              ]
+            },
+            {
+              "name": "Mid-size banks",
+              "stocks": [
+                "1066",
+                "1015",
+                "2488",
+                "5258",
+                "1171",
+                "1082"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Capital markets & lending",
+          "why": "Trading volumes and consumer credit",
+          "subthemes": [
+            {
+              "name": "Exchange",
+              "stocks": [
+                "1818"
+              ]
+            },
+            {
+              "name": "Consumer credit",
+              "stocks": [
+                "5139"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sector": "Consumer & tourism",
+      "themes": [
+        {
+          "name": "Value retail",
+          "why": "Store expansion and price-conscious consumers",
+          "subthemes": [
+            {
+              "name": "Minimarts & home improvement",
+              "stocks": [
+                "5326",
+                "5296",
+                "6599",
+                "7052"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Food & beverages",
+          "why": "Ringgit, input costs, demand",
+          "subthemes": [
+            {
+              "name": "Staples & food",
+              "stocks": [
+                "4707",
+                "7084",
+                "4065"
+              ]
+            },
+            {
+              "name": "Brewers",
+              "stocks": [
+                "3255",
+                "2836"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Tourism (Visit Malaysia 2026)",
+          "why": "Tourist arrivals, visa-free travel, gaming",
+          "subthemes": [
+            {
+              "name": "Gaming & resorts",
+              "stocks": [
+                "3182",
+                "4715"
+              ]
+            },
+            {
+              "name": "Aviation",
+              "stocks": [
+                "5099"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sector": "Energy & commodities",
+      "themes": [
+        {
+          "name": "Oil & gas",
+          "why": "Brent above US$100 for months; Petronas and offshore activity",
+          "subthemes": [
+            {
+              "name": "Upstream services & FPSO",
+              "stocks": [
+                "7293",
+                "5210",
+                "5243",
+                "5141",
+                "7277",
+                "5321"
+              ]
+            },
+            {
+              "name": "Producers",
+              "stocks": [
+                "5199"
+              ]
+            },
+            {
+              "name": "Downstream & shipping",
+              "stocks": [
+                "5183",
+                "5681",
+                "3816"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Plantation",
+          "why": "CPO price, labour, replanting",
+          "subthemes": [
+            {
+              "name": "Planters",
+              "stocks": [
+                "2445",
+                "1961",
+                "5285",
+                "2089",
+                "5138"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Metals",
+          "why": "Aluminium prices, low-cost hydro power",
+          "subthemes": [
+            {
+              "name": "Aluminium",
+              "stocks": [
+                "8869"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sector": "Healthcare",
+      "themes": [
+        {
+          "name": "Hospitals",
+          "why": "Medical tourism and ageing population",
+          "subthemes": [
+            {
+              "name": "Hospital operators",
+              "stocks": [
+                "5225",
+                "5878"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Gloves",
+          "why": "Recovery after the post-COVID glut; US tariffs on China",
+          "subthemes": [
+            {
+              "name": "Glove makers",
+              "stocks": [
+                "7113",
+                "5168",
+                "7153"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sector": "Telco & logistics",
+      "themes": [
+        {
+          "name": "Telecoms",
+          "why": "5G, consolidation, dividends",
+          "subthemes": [
+            {
+              "name": "Mobile & fixed telcos",
+              "stocks": [
+                "6947",
+                "6012",
+                "6888",
+                "4863"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Ports & logistics",
+          "why": "Trade volumes, transshipment",
+          "subthemes": [
+            {
+              "name": "Ports",
+              "stocks": [
+                "5246"
+              ]
+            },
+            {
+              "name": "Aerospace engineering",
+              "stocks": [
+                "9822"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "moats": {
+    "5347.KL": "Regulated national grid and main power generator (incentive-based regulation)",
+    "6033.KL": "Regulated gas transport and processing infrastructure",
+    "1295.KL": "Low-cost deposit franchise and strong asset quality track record",
+    "1155.KL": "Largest banking franchise and payments network in Malaysia",
+    "1818.KL": "Sole stock exchange operator in Malaysia",
+    "5246.KL": "Long-term port concession on a major transshipment route",
+    "8869.KL": "Low-cost hydro-powered aluminium smelting in Sarawak",
+    "4707.KL": "Dominant brands (Milo, Nescafé) and distribution",
+    "5326.KL": "Scale and store density in neighbourhood minimarts",
+    "5225.KL": "Regional hospital network and specialist talent",
+    "6742.KL": "Regulated utilities (Wessex Water, PowerSeraya) plus data-centre land and power",
+    "7084.KL": "Integrated food chain (feed, poultry, marine products) with scale",
+    "3255.KL": "Brand portfolio in a licensed, concentrated beer market",
+    "2836.KL": "Brand portfolio in a licensed, concentrated beer market"
+  }
+}
