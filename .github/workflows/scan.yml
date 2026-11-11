@@ -1,0 +1,58 @@
+name: Daily scan
+
+on:
+  schedule:
+    # 10:20 UTC = 6:20 pm Malaysia time, Monday to Friday (Bursa closes 5:00 pm)
+    - cron: "20 10 * * 1-5"
+  workflow_dispatch:
+    inputs:
+      research:
+        description: "Analyse stocks or warrants (optional): e.g. 1155 or 1155,5347 or YTLPOWR-C2C (warrants must be in config.json)"
+        required: false
+        default: ""
+
+permissions:
+  contents: write
+
+concurrency:
+  group: scan
+  cancel-in-progress: false
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install
+        run: pip install -r requirements.txt
+
+      - name: Scan, research and alert
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          RESEARCH_TICKER: ${{ github.event.inputs.research }}
+          APP_URL: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/
+        run: python scan.py
+
+      - name: Analyse requested stocks and warrants
+        if: ${{ github.event.inputs.research != '' }}
+        env:
+          RESEARCH_TICKER: ${{ github.event.inputs.research }}
+        run: python lookup.py
+
+      - name: Save results for the web app
+        run: |
+          git config user.name "bebas-bot"
+          git config user.email "bebas-bot@users.noreply.github.com"
+          git add signals.json fundamentals.json research.json lookup.json 2>/dev/null || true
+          git diff --cached --quiet || git commit -m "Scan $(date -u +%F)"
+          git pull --rebase --autostash || true
+          git push
