@@ -268,7 +268,7 @@
   },
   "research": {
     "fundamentals_max_age_days": 7,
-    "fundamentals_per_run": 30,
+    "fundamentals_per_run": 60,
     "news": true,
     "ai": {
       "enabled": true,
@@ -792,5 +792,12 @@
     "7084.KL": "Integrated food chain (feed, poultry, marine products) with scale",
     "3255.KL": "Brand portfolio in a licensed, concentrated beer market",
     "2836.KL": "Brand portfolio in a licensed, concentrated beer market"
-  }
+  },
+  "wide": {
+    "enabled": true,
+    "min_price": 0.05,
+    "min_avg_value_rm": 1000000,
+    "max_stocks": 800,
+    "fundamentals_top": 120,
+    "min_expected": 300
 }
