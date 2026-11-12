@@ -551,6 +551,7 @@ def run(data: dict[str, pd.DataFrame], index_df: pd.DataFrame | None = None) -> 
         warrants_by_mother.setdefault(w["mother"], []).append(w)
 
     last_date = max(df.index[-1] for df in data.values())
+    core = set(CFG.get("_core") or names)
 
     for t, raw in data.items():
         d = add_indicators(raw)
@@ -570,7 +571,8 @@ def run(data: dict[str, pd.DataFrame], index_df: pd.DataFrame | None = None) -> 
                          "value20_m": round(float(last["value20"]) / 1e6, 2),
                          "new_high": bool(last["high"] >= last["high250"]), "new_low": bool(last["low"] <= last["low250"]),
                          "pct_from_high": round(float((last["close"] / last["high250"] - 1) * 100), 1),
-                         "closes": [round(float(x), 3) for x in c.tail(120)],
+                         "closes": [round(float(x), 3) for x in c.tail(120 if t in core else 60)],
+                         "core": t in core,
                          "volume": volume_profile(d, n - 1)})
 
         for key in bull_keys:
@@ -773,7 +775,8 @@ def run(data: dict[str, pd.DataFrame], index_df: pd.DataFrame | None = None) -> 
         "generated_at": dt.datetime.now(MYT).strftime("%Y-%m-%d %H:%M MYT"),
         "data_date": last_date.strftime("%Y-%m-%d"),
         "universe_size": len(CFG["universe"]), "scanned": len(data),
-        "missing": sorted(set(CFG["universe"]) - set(data)),
+        "universe_core": len(core), "whole_market": len(CFG["universe"]) > len(core),
+        "missing": sorted(set(CFG["universe"]) - set(data))[:60],
         "account": ACC, "strategy": S, "alerts_cfg": A,
         "regime": regime, "market": market, "stocks": rows,
         "signals": signals, "warnings": warnings, "exits": exits,
@@ -940,7 +943,10 @@ def enrich(res: dict, data: dict[str, pd.DataFrame]) -> None:
 
     fpath = ROOT / "fundamentals.json"
     try:
-        fc = R.refresh_fundamentals(list(dict.fromkeys(list(names) + holdings + on_demand)), priority, fpath, rcfg)
+        core = list(CFG.get("_core") or names)
+        extra = sorted((x for x in res["stocks"] if x["ticker"] not in core), key=lambda x: x["value20_m"], reverse=True)
+        top_extra = [x["ticker"] for x in extra[: int(CFG.get("wide", {}).get("fundamentals_top", 120))]]
+        fc = R.refresh_fundamentals(list(dict.fromkeys(core + top_extra + holdings + on_demand)), priority, fpath, rcfg)
         fc = R.score_all(fc, sectors)
         fpath.write_text(json.dumps(fc, separators=(",", ":"), default=str), encoding="utf-8")
     except Exception as e:
@@ -1066,6 +1072,13 @@ def enrich(res: dict, data: dict[str, pd.DataFrame]) -> None:
 
 
 def main():
+    try:
+        import universe as U
+        added = U.apply(CFG)
+        if added:
+            print(f"Whole market: {added} more stocks added to your {len(CFG['_core'])}")
+    except Exception as e:                       # the daily scan must never fail because of this
+        print(f"whole-market list skipped: {e}", file=sys.stderr)
     tickers = list(CFG["universe"].keys())
     extra = [h["ticker"] for h in CFG.get("holdings", [])] + \
         [_norm_ticker(t) for t in os.environ.get("RESEARCH_TICKER", "").split(",") if t.strip().isdigit()]
