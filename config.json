@@ -796,7 +796,7 @@
   "wide": {
     "enabled": true,
     "min_price": 0.05,
-    "min_avg_value_rm": 1000000,
+    "min_avg_value_rm": 300000,
     "max_stocks": 800,
     "fundamentals_top": 120,
     "min_expected": 300
