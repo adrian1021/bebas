@@ -50,7 +50,10 @@ NAME_SKIP_RX = re.compile(r"(-[A-Z]{1,2}\d?\s*$)|WARRANT|ICULS|\bETF\b|\bRCPS\b|
 
 def _query(*conds):
     from yfinance import EquityQuery
-    return EquityQuery("and", [EquityQuery("eq", ["exchange", "KLS"])] + [EquityQuery(*c) for c in conds])
+    base = EquityQuery("eq", ["exchange", "KLS"])
+    if not conds:                                               # yfinance rejects an "and" with one operand
+        return base
+    return EquityQuery("and", [base] + [EquityQuery(*c) for c in conds])
 
 
 def _pages(query, max_pages: int = 8) -> list[dict]:
